@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Plesase fill you details"
+            android:textColor="@color/mdtp_dark_gray"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* is need to fill"
+            android:textColor="@color/mdtp_dark_gray"
+            android:textSize="20sp"/>
+        <EditText
+            android:id="@+id/newEmail"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="textEmailAddress"
+            android:hint="Email *"
+            android:layout_marginBottom="10dp"/>
+        <EditText
+            android:id="@+id/newPassword"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="textPassword"
+            android:hint="Password *"
+            android:layout_marginBottom="10dp"/>
+        <EditText
+            android:id="@+id/newFirstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name *"
+            android:inputType="text"
+            android:layout_marginBottom="10dp"/>
+        <EditText
+            android:id="@+id/newSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentRight="true"
+            android:hint="Surname *"
+            android:inputType="text" />
+        <EditText
+            android:id="@+id/newDOB"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Date of Birth"
+            android:layout_centerInParent="true"/>
+        <Button
+            android:id="@+id/register"
+            android:textAllCaps="false"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textSize="20dp"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="255dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

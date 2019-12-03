@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/pname"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="name"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/pdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="date"
+            android:layout_alignParentRight="true"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/pamoount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pdate"
+            android:layout_alignParentRight="true"
+            android:text="amount"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pdate"
+            android:layout_toLeftOf="@+id/pamoount"
+            android:text="€"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/premark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pname"
+            android:text="remark"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</LinearLayout>
