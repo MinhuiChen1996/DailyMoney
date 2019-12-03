@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -34,6 +35,15 @@ public class Register extends AppCompatActivity {
         surname = (EditText) findViewById(R.id.newSurname);
         DOB = (EditText) findViewById(R.id.newDOB);
 
+        Button BtnBack =  findViewById(R.id.btnBack);
+        BtnBack.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Register.this, Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         // perform click event on edit text
         DOB.setOnClickListener(new View.OnClickListener() {
             @Override

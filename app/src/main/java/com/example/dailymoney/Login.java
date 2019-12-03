@@ -24,14 +24,22 @@ public class Login extends AppCompatActivity {
 
         db = new Database(this);
 
-        Button BtnRge = (Button)findViewById(R.id.register);
-        Button BtnForget =  findViewById(R.id.ForgetPassWord);
-        Button BtnLogin = findViewById(R.id.login);
+        Button BtnRge = (Button)findViewById(R.id.btnregister);
+        Button BtnBack =  findViewById(R.id.btnBack);
+        Button BtnLogin = findViewById(R.id.btnlogin);
 
         BtnRge.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 Intent intent = new Intent(Login.this, Register.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        BtnBack.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Login.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
