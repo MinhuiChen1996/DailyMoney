@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blueBackground"
     tools:context=".Login">
 
     <LinearLayout
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:text="Login"
                 android:layout_centerHorizontal="true"
-                android:textSize="20sp"
+                android:textSize="30sp"
                 android:layout_centerVertical="true">
             </TextView>
         </RelativeLayout>
@@ -84,7 +85,8 @@
             android:textAllCaps="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Create An New Account"
+            android:text="Register"
+            android:textSize="20sp"
             />
         </LinearLayout>
     </LinearLayout>

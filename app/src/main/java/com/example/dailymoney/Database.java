@@ -52,9 +52,6 @@ public class Database
     private static final String  PREMARK	    = "Premark";
     private static final String PAY_TABLE 	= "Pay";
 
-    private static final String DATABASE_NAME 	= "DailyMoneyDB";
-    private static final int DATABASE_VERSION 	= 1;
-
     private static final String CREATE_TABLE_PAY = "create table Pay (payId integer primary key autoincrement, " +
             "Pcate text," +
             "Pname text," +
@@ -64,6 +61,9 @@ public class Database
             "Premark text, " +
             "Aname text, " +
             "foreign key(Aname) references Account(Aname));";
+
+    private static final String DATABASE_NAME 	= "DailyMoneyDB";
+    private static final int DATABASE_VERSION 	= 1;
 
     private final Context context;
     private DatabaseHelper DBHelper;
