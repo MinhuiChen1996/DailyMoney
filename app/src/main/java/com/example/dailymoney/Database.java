@@ -56,7 +56,7 @@ public class Database
             "Pcate text," +
             "Pname text," +
             "Pamount number, "+
-            "Pdate text, "+
+            "Pdate date, "+
             "Ptime text, "+
             "Premark text, " +
             "Aname text, " +
@@ -193,7 +193,7 @@ public class Database
                                 PREMARK,
                                 ACCOUNTNAME
                         },
-                null, null, null, null, PDATE +" ASC"
+                null, null, null, null, PDATE +" DESC"
         );
     }
     public boolean deletePay(Integer payid)
