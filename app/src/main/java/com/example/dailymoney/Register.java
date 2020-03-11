@@ -32,8 +32,8 @@ public class Register extends AppCompatActivity {
         email = (EditText) findViewById(R.id.newEmail);
         password = (EditText) findViewById(R.id.newPassword);
         firstname = (EditText) findViewById(R.id.newFirstname);
-        surname = (EditText) findViewById(R.id.newSurname);
-        DOB = (EditText) findViewById(R.id.newDOB);
+//        surname = (EditText) findViewById(R.id.newSurname);
+//        DOB = (EditText) findViewById(R.id.newDOB);
 
         Button BtnBack =  findViewById(R.id.btnBack);
         BtnBack.setOnClickListener(new View.OnClickListener() {

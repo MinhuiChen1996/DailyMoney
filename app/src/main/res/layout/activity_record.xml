@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bluebackground"
+    android:background="@color/colorDarkGrey"
     tools:context=".Record">
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,14 +18,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent">
+            android:background="@color/colorPurple">
             <Button
                 android:id="@+id/btnBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Back"
+                android:textColor="@color/mdtp_white"
                 android:textSize="20sp"
-                android:background="@color/colorAccent">
+                android:background="@color/colorPurple">
             </Button>
             <TextView
                 android:layout_width="wrap_content"
@@ -42,7 +43,7 @@
                 android:text="Save"
                 android:textSize="20sp"
                 android:layout_alignParentRight="true"
-                android:background="@color/colorAccent">
+                android:background="@color/colorPurple">
             </Button>
         </RelativeLayout>
         <GridLayout
@@ -90,6 +91,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:hint="Date"
+                android:textColor="@color/mdtp_white"
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:layout_centerInParent="true"/>
@@ -99,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:textSize="20sp"
+                android:textColor="@color/mdtp_white"
                 android:layout_centerInParent="true"
                 android:hint="Time"
                 android:inputType="datetime"/>
@@ -116,6 +119,7 @@
                 android:layout_marginLeft="10dp"
                 android:hint="Name"
                 android:textSize="20sp"
+                android:textColor="@color/mdtp_white"
                 android:layout_centerInParent="true"
                 android:inputType="text"/>
             <EditText
@@ -126,6 +130,7 @@
                 android:layout_marginLeft="10dp"
                 android:hint="Remark"
                 android:textSize="20sp"
+                android:textColor="@color/mdtp_white"
                 android:layout_centerInParent="true"
                 android:inputType="text"/>
             <EditText
@@ -136,6 +141,7 @@
                 android:layout_marginLeft="10dp"
                 android:hint="Account"
                 android:textSize="20sp"
+                android:textColor="@color/mdtp_white"
                 android:layout_centerInParent="true"
                 android:inputType="text"/>
             <EditText
@@ -146,6 +152,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="Amount"
                 android:textSize="20sp"
+                android:textColor="@color/mdtp_white"
                 android:layout_centerInParent="true"
                 android:inputType="numberDecimal"/>
         </LinearLayout>

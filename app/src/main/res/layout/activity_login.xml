@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bluebackground"
+    android:background="@color/colorPurple"
     tools:context=".Login">
 
     <LinearLayout
@@ -19,7 +19,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent">
+            android:background="@color/colorPurple">
 
             <Button
                 android:id="@+id/btnBack"
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Back"
                 android:textSize="20sp"
-                android:background="@color/colorAccent">
+                android:background="@color/colorPurple">
             </Button>
             <TextView
                 android:layout_width="wrap_content"

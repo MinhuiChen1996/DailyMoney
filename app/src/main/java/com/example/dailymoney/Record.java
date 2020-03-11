@@ -25,6 +25,8 @@ public class Record extends AppCompatActivity {
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
+
+    String speech;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +41,21 @@ public class Record extends AppCompatActivity {
         newAccount = (EditText) findViewById(R.id.newAcount);
         newAmount = (EditText) findViewById(R.id.newAmount);
 
+        newTime.set
 
 
         final RadioGroup radgroup = (RadioGroup) findViewById(R.id.radioGroup);
 
         Button BtnBack = (Button)findViewById(R.id.btnBack);
         Button BtnSave = (Button)findViewById(R.id.btnSave);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            speech = extras.getString("EXTRA_SESSION_ID");
+            //The key argument here must match that used in the other activity
+        }
+
+        Toast.makeText(Record.this, speech, Toast.LENGTH_SHORT).show();
 
         BtnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

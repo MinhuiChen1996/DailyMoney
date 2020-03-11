@@ -4,7 +4,8 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
         <TextView
             android:id="@+id/pname"
             android:layout_height="wrap_content"
@@ -43,6 +44,14 @@
             android:layout_below="@+id/pname"
             android:text="remark"
             android:textSize="18sp" />
+        <TableRow
+            android:id="@+id/line"
+            android:layout_below="@+id/pamoount"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#444"
+            >
+        </TableRow>
     </RelativeLayout>
 
 </LinearLayout>
