@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DailyMoney</string>
+    <string name="nav_open">DrawerOpen</string>
+    <string name="nav_close">DrawerClose</string>
 </resources>
