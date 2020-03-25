@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:fitsSystemWindows="true"
+    tools:context=".Record">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_record"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/btnFood"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:drawableTop="@drawable/food"
+                    android:text="Food"/>
+                <RadioButton
+                    android:id="@+id/btnDaily"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/daily"
+                    android:text="Daily"/>
+                <RadioButton
+                    android:id="@+id/btnClothes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/clothes"
+                    android:text="Clothes"/>
+                <RadioButton
+                    android:id="@+id/btnMedical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/medical"
+                    android:text="Medical"/>
+                <!--                <RadioButton
+                                    android:id="@+id/btnGift"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableTop="@drawable/gift"
+                                    android:text="Gift"/>-->
+            </RadioGroup>
+
+            <!--        </GridLayout>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+                <TextView
+                    android:id="@+id/newDate"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Date"
+                    android:textColor="@color/mdtp_white"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerInParent="true"/>
+                <TextView
+                    android:id="@+id/newTime"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/mdtp_white"
+                    android:layout_centerInParent="true"
+                    android:hint="Time"
+                    android:inputType="datetime"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+                <EditText
+                    android:id="@+id/newPname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:hint="Name"
+                    android:textSize="20sp"
+                    android:textColor="@color/mdtp_white"
+                    android:layout_centerInParent="true"
+                    android:inputType="text"
+                    android:layout_weight="1"/>
+                <EditText
+                    android:id="@+id/newRemark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:hint="Remark"
+                    android:textSize="20sp"
+                    android:textColor="@color/mdtp_white"
+                    android:layout_centerInParent="true"
+                    android:inputType="text"
+                    android:layout_weight="1"/>
+                <EditText
+                    android:id="@+id/newAcount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:hint="Account"
+                    android:textSize="20sp"
+                    android:textColor="@color/mdtp_white"
+                    android:layout_centerInParent="true"
+                    android:inputType="text"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/newAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="0.00"
+                    android:textSize="20sp"
+                    android:textColor="@color/mdtp_white"
+                    android:singleLine="true"
+                    android:layout_centerInParent="true" />
+            </LinearLayout>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    android:id="@+id/linearlayout">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="4"
+                        android:orientation="vertical"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="bottom">
+
+                            <TextView
+                                android:id="@+id/btn_price_1"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:text="1"
+                                android:gravity="center"
+                                />
+
+                            <TextView
+                                android:id="@+id/btn_price_2"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:text="2"
+                                android:gravity="center"
+                                />
+
+                            <TextView
+                                android:id="@+id/btn_price_3"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:text="3"
+                                android:gravity="center"
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" >
+
+                            <TextView
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:gravity="center"
+                                android:id="@+id/btn_price_4"
+                                android:text="4" />
+
+                            <TextView
+                                android:id="@+id/btn_price_5"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:gravity="center"
+                                android:text="5" />
+
+                            <TextView
+                                android:id="@+id/btn_price_6"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:text="6"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:gravity="center"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" >
+
+                            <TextView
+                                android:id="@+id/btn_price_7"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:gravity="center"
+                                android:text="7" />
+
+                            <TextView
+                                android:id="@+id/btn_price_8"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:gravity="center"
+                                android:text="8" />
+
+                            <TextView
+                                android:id="@+id/btn_price_9"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:gravity="center"
+                                android:text="9" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/btn_price_0"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:gravity="center"
+                                android:text="0" />
+
+                            <TextView
+                                android:id="@+id/btn_price_point"
+                                android:layout_width="68.33dp"
+                                android:layout_height="52dp"
+                                android:textColor="@android:color/black"
+                                android:textSize="18dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="." />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:orientation="vertical" >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="51.6dp"
+                                android:gravity="center"
+                                android:id="@+id/btn_price_del"
+                                >
+                                <TextView
+                                    android:id="@+id/btn_price_clear"
+                                    android:text="Delete"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/btn_ok"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textSize="18dp"
+                                android:gravity="center"
+                                android:text="Ok" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

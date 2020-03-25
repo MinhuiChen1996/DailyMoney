@@ -56,7 +56,7 @@ public class Database
             "Pcate text," +
             "Pname text," +
             "Pamount number, "+
-            "Pdate date, "+
+            "Pdate text, "+
             "Ptime text, "+
             "Premark text, " +
             "Aname text, " +
@@ -121,6 +121,7 @@ public class Database
         initialValues.put(KEY_USERDOB, userDOB);
         return db.insert(USER_TABLE, null, initialValues);
     }
+
     public boolean deleteUser(String email)
     {
         //
@@ -139,6 +140,7 @@ public class Database
                         },
                 null, null, null, null, null);
     }
+
     public Cursor getUser(String email, String password) throws SQLException
     {
         String[] selectionArgs = {email, password};
@@ -153,6 +155,7 @@ public class Database
                         },
                 KEY_USEREMAIL + "=? and " + KEY_USERPASSWORD + "=?",  selectionArgs, null, null, null, null);
     }
+
     public Cursor checkUser(String email) throws SQLException
     {
         String[] selectionArgs = {email};
@@ -167,6 +170,7 @@ public class Database
                         },
                 KEY_USEREMAIL + "=? ",  selectionArgs, null, null, null, null);
     }
+
     public Cursor getAllAccount()
     {
         return db.query(ACCOUNT_TABLE, new String[]
@@ -193,14 +197,33 @@ public class Database
                                 PREMARK,
                                 ACCOUNTNAME
                         },
-                null, null, null, null, PDATE +" DESC"
+                null, null, null, null, "date("+PDATE+") desc"
         );
     }
+
+    public Cursor seearchPay(String str){
+        String[] selectionArgs = {"%"+str+"%","%"+str+"%","%"+str+"%","%"+str+"%","%"+str+"%"};
+        return db.query(PAY_TABLE, new String[]
+                        {
+                                PAYID +" as _id",
+                                PCATE,
+                                PNAME,
+                                PAMOUNT,
+                                PDATE,
+                                PTIME,
+                                PREMARK,
+                                ACCOUNTNAME
+                        },
+                PCATE+" like ? or "+PNAME+" like ? or " +PAMOUNT+" like ? or "+PREMARK+" like ? or "+ACCOUNTNAME+" like ?", selectionArgs, null, null, "date("+PDATE+") desc"
+        );
+    }
+
     public boolean deletePay(Integer payid)
     {
         //
         return db.delete(PAY_TABLE, PAYID + "=" + payid, null) > 0;
     }
+
     public long insertPay(String pcate,String pname, Double pamount,String pdate, String ptime, String premark,String accountName)
     {
         ContentValues initialValues = new ContentValues();

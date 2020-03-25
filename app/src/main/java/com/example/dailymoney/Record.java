@@ -1,6 +1,9 @@
 package com.example.dailymoney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -11,7 +14,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,10 +28,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Record extends AppCompatActivity {
-    private EditText newDate, newTime,newName, newRemark, newAccount, newAmount;
+
+    private Toolbar toolbar;
+
+    private EditText newName, newRemark, newAccount, newAmount;
+    private TextView newDate, newTime;
     private Database db;
 
     DatePickerDialog datePickerDialog;
@@ -40,11 +52,15 @@ public class Record extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+        //set Status bar
+        setStatus();
+        initToolbar();
+
         db = new Database(this);
 
-        newDate = (EditText) findViewById(R.id.newDate);
-        newTime = (EditText) findViewById(R.id.newTime);
-//        newName = (EditText) findViewById(R.id.newPname);
+        newDate = (TextView) findViewById(R.id.newDate);
+        newTime = (TextView) findViewById(R.id.newTime);
+        newName = (EditText) findViewById(R.id.newPname);
         newRemark = (EditText) findViewById(R.id.newRemark);
         newAccount = (EditText) findViewById(R.id.newAcount);
         newAmount = (EditText) findViewById(R.id.newAmount);
@@ -59,8 +75,16 @@ public class Record extends AppCompatActivity {
             //The key argument here must match that used in the other activity
         }
 
-        Toast.makeText(Record.this, speech, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(Record.this, speech, Toast.LENGTH_SHORT).show();
 
+        // split the keyword from speech
+        String sPrice = extractPrice(speech);
+        newAmount.setText(sPrice);
+
+        String pName =  extracProduct(speech);
+        newName.setText(pName);
+
+/*        //back to main screen
         ImageButton BtnBack = (ImageButton) findViewById(R.id.btnBack);
         BtnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -69,8 +93,20 @@ public class Record extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        });
+        });*/
 
+
+        // current date
+        Calendar c = Calendar.getInstance();
+        int cYear = c.get(Calendar.YEAR);
+        int cMonth = c.get(Calendar.MONTH);
+        int cDay = c.get(Calendar.DAY_OF_MONTH);
+        c.set(cYear,cMonth,cDay);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = format.format(c.getTime());
+
+        newDate.setText(strDate);
         // perform click event on edit text for select date
         newDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +122,10 @@ public class Record extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                newDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                c.set(year,monthOfYear,dayOfMonth);
+                                String strDate = format.format(c.getTime());
+                                newDate.setText(strDate);
+//                                newDate.setText( year+ "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             }
                         }, mYear, mMonth, mDay);
                 //using steMaxDate to contraint date only current date or pass date
@@ -95,6 +134,10 @@ public class Record extends AppCompatActivity {
             }
         });
 
+       // current time
+        int cHour = c.get(Calendar.HOUR_OF_DAY);
+        int cMinute = c.get(Calendar.MINUTE);
+        newTime.setText(cHour +":"+ cMinute);
         newTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +169,6 @@ public class Record extends AppCompatActivity {
             mBtnkey_digits[i].setOnClickListener(mClickListener);
         }
 
-
         TextView mBtnKey_sk = (TextView)findViewById(R.id.btn_ok);
         TextView mBtnKey_point = (TextView)findViewById(R.id.btn_price_point);
         LinearLayout mBtnKey_del = (LinearLayout)findViewById(R.id.btn_price_del);
@@ -136,6 +178,32 @@ public class Record extends AppCompatActivity {
         mBtnKey_sk.setOnClickListener(mClickListener);
 
     }
+
+    // Toolbar setting
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                Intent intent = new Intent(Record.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -172,7 +240,7 @@ public class Record extends AppCompatActivity {
                 }
                 newAmount.setTextSize(30);
                 newAmount.setTextColor(Color.BLACK);
-            } else if (id == R.id.btn_ok) {//收款
+            } else if (id == R.id.btn_ok) {//save
 
                 String date = newDate.getText().toString();
                 String time = newTime.getText().toString();
@@ -207,7 +275,7 @@ public class Record extends AppCompatActivity {
                 }
                 db.close();
 
-            } else if (id == R.id.btn_price_del) {//清除
+            } else if (id == R.id.btn_price_del) {// clear one digital
                 if (newAmount.getText().length() > 0) {
                     String strTmp = newAmount.getText().toString();
                     strTmp = strTmp.substring(0, strTmp.length() - 1);
@@ -250,5 +318,42 @@ public class Record extends AppCompatActivity {
 
         }
 
+    }
+
+
+    public static String extractPrice(final String str){
+        if(str == null || str.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder();
+        boolean found =  false;
+        for(char c :  str.toCharArray()){
+            if(Character.isDigit(c)|| c == '.'){
+                sb.append(c);
+                found=true;
+            }
+            else if(found || c == '$' || c == '€'){
+                break;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String extracProduct(final String str){
+        if(str == null || str.isEmpty()) return "";
+
+        StringBuilder sb = new StringBuilder();
+        for(char c :  str.toCharArray()){
+            if( Character.isDigit(c) || c == '$' || c == '€'){
+                break;
+            }
+            else{
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+    // status bar
+    private void setStatus() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
     }
 }

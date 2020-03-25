@@ -10,7 +10,7 @@
         android:background="@drawable/background_main"
         android:orientation="vertical">
 
-        <RelativeLayout
+<!--        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_main">
@@ -32,7 +32,7 @@
                 android:text="Add"
                 android:textSize="20sp"></Button>
 
-        </RelativeLayout>
+        </RelativeLayout>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp">
@@ -40,8 +40,8 @@
                 android:id="@+id/tv_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:text="Budget:">
-
             </TextView>
         </LinearLayout>
         <LinearLayout

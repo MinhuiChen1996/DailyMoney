@@ -14,27 +14,26 @@
             android:textSize="18sp"/>
 
         <TextView
-            android:id="@+id/pdate"
+            android:id="@+id/pamount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="date"
+            android:text="amount"
             android:layout_alignParentRight="true"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/pamoount"
+            android:id="@+id/pdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/pdate"
+            android:layout_below="@+id/pamount"
             android:layout_alignParentRight="true"
-            android:text="amount"
+            android:text="date"
             android:textSize="18sp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/pdate"
-            android:layout_toLeftOf="@+id/pamoount"
+            android:layout_toLeftOf="@+id/pamount"
             android:text="€"
             android:textSize="18sp" />
         <TextView
@@ -46,7 +45,7 @@
             android:textSize="18sp" />
         <TableRow
             android:id="@+id/line"
-            android:layout_below="@+id/pamoount"
+            android:layout_below="@+id/pdate"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#444"
