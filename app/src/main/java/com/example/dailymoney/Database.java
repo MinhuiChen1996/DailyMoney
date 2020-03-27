@@ -217,6 +217,22 @@ public class Database
                 PCATE+" like ? or "+PNAME+" like ? or " +PAMOUNT+" like ? or "+PREMARK+" like ? or "+ACCOUNTNAME+" like ?", selectionArgs, null, null, "date("+PDATE+") desc"
         );
     }
+    public Cursor monthPay(String str){
+        String[] selectionArgs = {str+"%"};
+        return db.query(PAY_TABLE, new String[]
+                        {
+                                PAYID +" as _id",
+                                PCATE,
+                                PNAME,
+                                PAMOUNT,
+                                PDATE,
+                                PTIME,
+                                PREMARK,
+                                ACCOUNTNAME
+                        },
+                PDATE+" like ?", selectionArgs, null, null, "date("+PDATE+") desc"
+        );
+    }
 
     public boolean deletePay(Integer payid)
     {

@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -25,9 +26,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,8 +40,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ListView mListView;
@@ -50,11 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton add;
     private FloatingActionButton voice;
 
-    private TextView textView;
+    private TextView textView,monthYear;
 
     private Intent intent;
-
-
 
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
@@ -64,6 +69,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int[] recordList = new int []{ R.id.pname, R.id.pdate, R.id.premark, R.id.pamount};
 
     public ArrayAdapter mList;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM");
+    SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat mY = new SimpleDateFormat("yyyy-MM");
+
+    private RelativeLayout date_picker_button;
+
+    private String strDe,monthYearStr,strDate,speech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +100,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // setting for navagtion view
         initgNavagationView();
 
+        setTitle("Daily Money");
 
+        monthYear = (TextView) findViewById(R.id.date_picker_text_view);
+        date_picker_button = (RelativeLayout)findViewById(R.id.date_picker_button);
+
+        // current month & year
+        Calendar c = Calendar.getInstance();
+        int cYear = c.get(Calendar.YEAR);
+        int cMonth = c.get(Calendar.MONTH);
+        c.set(cYear,cMonth,01);
+
+        strDate = sdf.format(c.getTime());
+        monthYear.setText(strDate);
+        strDe = mY.format(c.getTime());
+        initListRecord(strDe);
+
+        date_picker_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
+                pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
+                        monthYearStr = year + "-" + (month + 1) + "-" + i2;
+                        c.set(year,month,i2);
+                        strDe = mY.format(c.getTime());
+                        initListRecord(strDe);
+                        monthYear.setText(formatMonthYear(monthYearStr));
+
+                    }
+                });
+                pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+            }
+        });
+
+
+
+    }
+    private void initListRecord(String str){
         db = new Database(this);
         db.open();
-        Cursor c = db.getAllPay();
+        Cursor c = db.monthPay(str);
         myAdapter = new SimpleCursorAdapter(this, R.layout.row_record, c, columns,recordList);
         mListView.setAdapter(myAdapter);
         db.close();
@@ -106,13 +157,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return false;
             }
         });*/
-
-
-
     }
-// voice function
+    String formatMonthYear(String str) {
+        Date date = null;
+        try {
+            date = input.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sdf.format(date);
+    }
+    @Override
+    public void setTitle(CharSequence title) {
+        TextView tvTitle = findViewById(R.id.title);
 
+        if (tvTitle != null) {
+            tvTitle.setText(title);
+        }
+    }
 
+    // voice function
     public void startVoiceRecognitionActivity() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -135,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Please select what you said").setAdapter(mList,new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    String speech = mList.getItem(which).toString();
+                    speech = mList.getItem(which).toString();
                     Intent intent = new Intent(MainActivity.this, Record.class);
                     intent.putExtra("EXTRA_SESSION_ID", speech);
                     startActivity(intent);

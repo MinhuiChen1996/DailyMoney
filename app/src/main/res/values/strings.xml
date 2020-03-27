@@ -2,4 +2,6 @@
     <string name="app_name">DailyMoney</string>
     <string name="nav_open">DrawerOpen</string>
     <string name="nav_close">DrawerClose</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>
