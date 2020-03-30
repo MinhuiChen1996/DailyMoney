@@ -217,6 +217,17 @@ public class Database
                 PCATE+" like ? or "+PNAME+" like ? or " +PAMOUNT+" like ? or "+PREMARK+" like ? or "+ACCOUNTNAME+" like ?", selectionArgs, null, null, "date("+PDATE+") desc"
         );
     }
+    public Cursor barChartPay(String str){
+        String[] selectionArgs = {str+"%"};
+        return db.query(PAY_TABLE, new String[]
+                        {
+                                PAYID +" as _id",
+                                "sum("+PAMOUNT+") as dayTotal",
+                                PDATE
+                        },
+                PDATE+" like ?", selectionArgs, PDATE,null, "date("+PDATE+") asc"
+        );
+    }
     public Cursor monthPay(String str){
         String[] selectionArgs = {str+"%"};
         return db.query(PAY_TABLE, new String[]

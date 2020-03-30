@@ -241,7 +241,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.details:
                 break;
             case R.id.charts:
-                textView.setText(item.getTitle());
+                Intent intent = new Intent(MainActivity.this, charts.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.navigation_export:
                 textView.setText(item.getTitle());
