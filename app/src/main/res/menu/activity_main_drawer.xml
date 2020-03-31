@@ -8,11 +8,15 @@
         android:title="Details" />
 
     <item
-        android:id="@+id/charts"
+        android:id="@+id/bar_chart"
         android:checked="true"
         android:icon="@mipmap/ic_launcher"
-        android:title="Chart" />
-
+        android:title="Bar Chart" />
+    <item
+        android:id="@+id/pie_chart"
+        android:checked="true"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Pie Chart" />
 
     <group android:id="@+id/id">
         <item

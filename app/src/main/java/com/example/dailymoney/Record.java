@@ -135,9 +135,10 @@ public class Record extends AppCompatActivity {
         });
 
        // current time
-        int cHour = c.get(Calendar.HOUR_OF_DAY);
-        int cMinute = c.get(Calendar.MINUTE);
-        newTime.setText(cHour +":"+ cMinute);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String curTime=sdf.format(date);
+        newTime.setText(curTime);
         newTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +150,8 @@ public class Record extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                newTime.setText(hourOfDay+":"+minute);
+                                String curTime = String.format("%02d:%02d", hourOfDay, minute);
+                                newTime.setText(curTime);
                             }
                         }, Hour, Minute, true);
                 timePickerDialog.show();

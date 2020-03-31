@@ -228,6 +228,18 @@ public class Database
                 PDATE+" like ?", selectionArgs, PDATE,null, "date("+PDATE+") asc"
         );
     }
+    public Cursor pieChartPay(String str){
+        String[] selectionArgs = {str+"%"};
+        return db.query(PAY_TABLE, new String[]
+                        {
+                                PAYID +" as _id",
+                                PCATE,
+                                "sum("+PAMOUNT+") as cateTotal"
+                        },
+                PDATE+" like ?", selectionArgs, PCATE,null, null
+
+        );
+    }
     public Cursor monthPay(String str){
         String[] selectionArgs = {str+"%"};
         return db.query(PAY_TABLE, new String[]

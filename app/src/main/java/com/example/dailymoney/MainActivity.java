@@ -10,12 +10,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -25,25 +22,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -57,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton add;
     private FloatingActionButton voice;
 
-    private TextView textView,monthYear;
+    private TextView textView,monthYear,username;
 
     private Intent intent;
 
@@ -101,6 +91,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initgNavagationView();
 
         setTitle("Daily Money");
+
+
+        username = (TextView) findViewById(R.id.nav_username);
+
+        username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
         monthYear = (TextView) findViewById(R.id.date_picker_text_view);
         date_picker_button = (RelativeLayout)findViewById(R.id.date_picker_button);
@@ -203,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Intent intent = new Intent(MainActivity.this, Record.class);
                     intent.putExtra("EXTRA_SESSION_ID", speech);
                     startActivity(intent);
+                    finish();
                 }
             }).create();
             dialog.show();
@@ -240,8 +244,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.details:
                 break;
-            case R.id.charts:
-                Intent intent = new Intent(MainActivity.this, charts.class);
+            case R.id.bar_chart:
+                Intent intent = new Intent(MainActivity.this, barchart.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.pie_chart:
+                intent = new Intent(MainActivity.this, piechart.class);
                 startActivity(intent);
                 finish();
                 break;

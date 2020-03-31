@@ -121,9 +121,15 @@ public class search extends AppCompatActivity implements NavigationView.OnNaviga
                 startActivity(intent);
                 finish();
                 break;
-
-            case R.id.charts:
-
+            case R.id.bar_chart:
+                intent = new Intent(search.this, barchart.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.pie_chart:
+                intent = new Intent(search.this, piechart.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.navigation_export:
 
