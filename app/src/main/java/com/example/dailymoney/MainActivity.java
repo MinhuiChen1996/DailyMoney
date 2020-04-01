@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton add;
     private FloatingActionButton voice;
 
-    private TextView textView,monthYear,username;
+    private TextView textView,monthYear,tv_login,nav_username;
 
     private Intent intent;
 
@@ -66,8 +68,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private RelativeLayout date_picker_button;
 
-    private String strDe,monthYearStr,strDate,speech;
-
+    private String strDe,monthYearStr,strDate,speech,username;
+    private View headerview;
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,19 +94,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initgNavagationView();
 
         setTitle("Daily Money");
+        headerview = navigationView.getHeaderView(0);
+        tv_login = (TextView)headerview.findViewById(R.id.nav_loginStatus);
+
+        checkLogin();
 
 
-        username = (TextView) findViewById(R.id.nav_username);
 
-        username.setOnClickListener(new View.OnClickListener() {
+        tv_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Login.class);
-                startActivity(intent);
-                finish();
+                String login_text = tv_login.getText().toString();
+                if(login_text.equals("Login")){
+                    Intent intent = new Intent(MainActivity.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else if(login_text.equals("Logout")){
+                    SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sp.edit();
+                    editor.putBoolean("isLogin", false);
+                    editor.putString("loginUserName", "");
+                    editor.commit();
+                    nav_username.setText("");
+                    tv_login.setText("Login");
+                    Toast.makeText(MainActivity.this, "Logout successful.", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(getIntent());
+                }
             }
         });
-
 
         monthYear = (TextView) findViewById(R.id.date_picker_text_view);
         date_picker_button = (RelativeLayout)findViewById(R.id.date_picker_button);
@@ -327,6 +347,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void checkLogin(){
+
+        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        if (loginstatus()){
+            username = sp.getString("loginUserName","");
+            nav_username = (TextView)headerview.findViewById(R.id.nav_username);
+            nav_username.setText(username);
+            tv_login.setText("Logout");
+        }
+    }
+    public boolean loginstatus(){
+        return sp.getBoolean("isLogin", false);
     }
 
 

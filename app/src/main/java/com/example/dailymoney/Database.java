@@ -16,19 +16,18 @@ public class Database
     // database columns
     //customer tabe
     private static final String KEY_USERID 	    = "userid";
+    private static final String KEY_USERNAME    = "userName";
     private static final String KEY_USEREMAIL 	= "userEmail";
     private static final String KEY_USERPASSWORD    = "userPassword";
-    private static final String KEY_FIRSTNAME    = "firstName";
+/*    private static final String KEY_FIRSTNAME    = "firstName";
     private static final String  KEY_SECONDNAME	    = "secondName";
-    private static final String  KEY_USERDOB	    = "userDOB";
+    private static final String  KEY_USERDOB	    = "userDOB";*/
     private static final String USER_TABLE 	= "User";
 
     private static final String CREATE_TABLE_USER = "create table User ( userid integer primary key autoincrement, " +
-            "userEmail text unique not null, " +
+            "userName text unique not null, " +
             "userPassword text not null," +
-            "firstName text not null, "  +
-            "secondName text, " +
-            "userDOB text);";
+            "userEmail text);";
 
     private static final String ACCOUNTID 	    = "accountId";
     private static final String ACCOUNTNAME 	= "AName";
@@ -111,14 +110,12 @@ public class Database
     }
     //////////////////////////// end nested dB helper class //////////////////////////////////////
 
-    public long insertUser(String userEmail, String userPassword,String fristname, String secondName, String userDOB)
+    public long insertUser(String userName, String userPassword,String userEmail)
     {
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_USEREMAIL, userEmail);
+        initialValues.put(KEY_USERNAME, userName);
         initialValues.put(KEY_USERPASSWORD, userPassword);
-        initialValues.put(KEY_FIRSTNAME, fristname);
-        initialValues.put(KEY_SECONDNAME, secondName);
-        initialValues.put(KEY_USERDOB, userDOB);
+        initialValues.put(KEY_USEREMAIL, userEmail);
         return db.insert(USER_TABLE, null, initialValues);
     }
 
@@ -133,42 +130,48 @@ public class Database
                         {
                                 KEY_USERID,
                                 KEY_USEREMAIL,
-                                KEY_USERPASSWORD,
-                                KEY_FIRSTNAME,
-                                KEY_SECONDNAME,
-                                KEY_USERDOB
+                                KEY_USERNAME,
+                                KEY_USERPASSWORD
                         },
                 null, null, null, null, null);
     }
-
-    public Cursor getUser(String email, String password) throws SQLException
+    public Cursor getUsPw(String userName) throws SQLException
     {
-        String[] selectionArgs = {email, password};
+        String[] selectionArgs = {userName};
         return db.query(true, USER_TABLE, new String[]
                         {
                                 KEY_USERID,
+                                KEY_USERNAME,
                                 KEY_USEREMAIL,
-                                KEY_USERPASSWORD,
-                                KEY_FIRSTNAME,
-                                KEY_SECONDNAME,
-                                KEY_USERDOB
+                                KEY_USERPASSWORD
                         },
-                KEY_USEREMAIL + "=? and " + KEY_USERPASSWORD + "=?",  selectionArgs, null, null, null, null);
+                KEY_USERNAME + "=?",  selectionArgs, null, null, null, null);
     }
 
-    public Cursor checkUser(String email) throws SQLException
+    public Cursor getUser(String userName, String password) throws SQLException
     {
-        String[] selectionArgs = {email};
+        String[] selectionArgs = {userName, password};
         return db.query(true, USER_TABLE, new String[]
                         {
                                 KEY_USERID,
+                                KEY_USERNAME,
                                 KEY_USEREMAIL,
-                                KEY_USERPASSWORD,
-                                KEY_FIRSTNAME,
-                                KEY_SECONDNAME,
-                                KEY_USERDOB
+                                KEY_USERPASSWORD
                         },
-                KEY_USEREMAIL + "=? ",  selectionArgs, null, null, null, null);
+                KEY_USERNAME + "=? and " + KEY_USERPASSWORD + "=?",  selectionArgs, null, null, null, null);
+    }
+
+    public Cursor checkUser(String userName) throws SQLException
+    {
+        String[] selectionArgs = {userName};
+        return db.query(true, USER_TABLE, new String[]
+                        {
+                                KEY_USERID,
+                                KEY_USERNAME,
+                                KEY_USERPASSWORD,
+                                KEY_USEREMAIL
+                        },
+                KEY_USERNAME + "=?",  selectionArgs, null, null, null, null);
     }
 
     public Cursor getAllAccount()

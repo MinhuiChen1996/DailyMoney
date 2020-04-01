@@ -75,26 +75,12 @@ public class Record extends AppCompatActivity {
             //The key argument here must match that used in the other activity
         }
 
-//        Toast.makeText(Record.this, speech, Toast.LENGTH_SHORT).show();
-
         // split the keyword from speech
         String sPrice = extractPrice(speech);
         newAmount.setText(sPrice);
 
         String pName =  extracProduct(speech);
         newName.setText(pName);
-
-/*        //back to main screen
-        ImageButton BtnBack = (ImageButton) findViewById(R.id.btnBack);
-        BtnBack.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                Intent intent = new Intent(Record.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });*/
-
 
         // current date
         Calendar c = Calendar.getInstance();
