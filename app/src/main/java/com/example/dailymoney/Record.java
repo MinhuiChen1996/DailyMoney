@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,16 +38,17 @@ public class Record extends AppCompatActivity {
 
     private Toolbar toolbar;
 
-    private EditText newName, newRemark, newAccount, newAmount;
+    private EditText newName, newMemo, newAccount, newAmount;
     private TextView newDate, newTime;
     private Database db;
 
-    DatePickerDialog datePickerDialog;
-    TimePickerDialog timePickerDialog;
+    private DatePickerDialog datePickerDialog;
+    private TimePickerDialog timePickerDialog;
 
-    String speech;
+    private String speech, userid,strDate,sPrice,pName,curTime,type;
 
-    RadioGroup radgroup;
+    private RadioGroup radgroup;
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,13 +57,14 @@ public class Record extends AppCompatActivity {
         //set Status bar
         setStatus();
         initToolbar();
+        setTitle("Record");
 
         db = new Database(this);
 
         newDate = (TextView) findViewById(R.id.newDate);
         newTime = (TextView) findViewById(R.id.newTime);
         newName = (EditText) findViewById(R.id.newPname);
-        newRemark = (EditText) findViewById(R.id.newRemark);
+        newMemo = (EditText) findViewById(R.id.newMemo);
         newAccount = (EditText) findViewById(R.id.newAcount);
         newAmount = (EditText) findViewById(R.id.newAmount);
         radgroup = (RadioGroup) findViewById(R.id.radioGroup);
@@ -76,10 +79,10 @@ public class Record extends AppCompatActivity {
         }
 
         // split the keyword from speech
-        String sPrice = extractPrice(speech);
+        sPrice = extractPrice(speech);
         newAmount.setText(sPrice);
 
-        String pName =  extracProduct(speech);
+        pName =  extracProduct(speech);
         newName.setText(pName);
 
         // current date
@@ -90,7 +93,7 @@ public class Record extends AppCompatActivity {
         c.set(cYear,cMonth,cDay);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String strDate = format.format(c.getTime());
+        strDate = format.format(c.getTime());
 
         newDate.setText(strDate);
         // perform click event on edit text for select date
@@ -109,7 +112,7 @@ public class Record extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
                                 c.set(year,monthOfYear,dayOfMonth);
-                                String strDate = format.format(c.getTime());
+                                strDate = format.format(c.getTime());
                                 newDate.setText(strDate);
 //                                newDate.setText( year+ "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             }
@@ -123,7 +126,7 @@ public class Record extends AppCompatActivity {
        // current time
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String curTime=sdf.format(date);
+        curTime=sdf.format(date);
         newTime.setText(curTime);
         newTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +139,7 @@ public class Record extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                String curTime = String.format("%02d:%02d", hourOfDay, minute);
+                                curTime = String.format("%02d:%02d", hourOfDay, minute);
                                 newTime.setText(curTime);
                             }
                         }, Hour, Minute, true);
@@ -165,6 +168,15 @@ public class Record extends AppCompatActivity {
         mBtnKey_del.setOnClickListener(mClickListener);
         mBtnKey_sk.setOnClickListener(mClickListener);
 
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        TextView tvTitle = findViewById(R.id.title);
+
+        if (tvTitle != null) {
+            tvTitle.setText(title);
+        }
     }
 
     // Toolbar setting
@@ -232,12 +244,12 @@ public class Record extends AppCompatActivity {
 
                 String date = newDate.getText().toString();
                 String time = newTime.getText().toString();
-                String Pname = newName.getText().toString();
-                String Premark = newRemark.getText().toString();
-                String Paccount = newAccount.getText().toString();
-                String strPamount = newAmount.getText().toString();
+                String name = newName.getText().toString();
+                String memo = newMemo.getText().toString();
+                String account = newAccount.getText().toString();
+                String amount = newAmount.getText().toString();
 
-                double Pamount = Double.parseDouble(strPamount);
+                double Pamount = Double.parseDouble(amount);
                 String Pcate = null;
                 for(int i = 0; i < radgroup.getChildCount(); i++){
                     RadioButton rd = (RadioButton) radgroup.getChildAt(i);
@@ -246,11 +258,10 @@ public class Record extends AppCompatActivity {
                         Pcate = rd.getText().toString();
                     }
                 }
+                userid = getuserid();
                 db.open();
-//                String query = "SELECT userid FROM " + "user_table" + " WHERE " + "userEmail" + " = '" + em + "'";
-//                Cursor mCursor = db.rawQuery(query, null);
-//
-                long qid = db.insertPay(Pcate, Pname, Pamount,date, time, Premark, Paccount);
+                type="expense";
+                long qid = db.insertRecord(type,Pcate, name, Pamount,date, time, memo, account,userid);
                 if(qid != -1)
                 {
                     Toast.makeText(getApplicationContext(),"Successfully Save Record!", Toast.LENGTH_LONG).show();
@@ -344,4 +355,9 @@ public class Record extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
     }
+    private String getuserid(){
+        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid","");
+    }
+
 }

@@ -38,17 +38,8 @@ public class Register extends AppCompatActivity {
         //set Status bar
         setStatus();
         initToolbar();
-
         initRegsiter();
 
-    }
-    @Override
-    public void setTitle(CharSequence title) {
-        TextView tvTitle = findViewById(R.id.title);
-
-        if (tvTitle != null) {
-            tvTitle.setText(title);
-        }
     }
     // status bar
     private void setStatus() {

@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Record">
+    tools:context=".about">
 
     <include
-        layout="@layout/app_bar_expense_income"
+        layout="@layout/app_bar"
         android:layout_width="match_parent"
         android:fitsSystemWindows="true"
         android:layout_height="match_parent" />
 
-    <include layout="@layout/contain_record" />
+    <include layout="@layout/contain_about" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_record"
+            android:background="@color/colorLightBlue"
             android:orientation="vertical">
 
             <RadioGroup
@@ -112,12 +112,12 @@
                     android:inputType="text"
                     android:layout_weight="1"/>
                 <EditText
-                    android:id="@+id/newRemark"
+                    android:id="@+id/newMemo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
-                    android:hint="Remark"
+                    android:hint="Memo"
                     android:textSize="20sp"
                     android:textColor="@color/mdtp_white"
                     android:layout_centerInParent="true"
@@ -194,7 +194,6 @@
                                 android:text="1"
                                 android:gravity="center"
                                 />
-
                             <TextView
                                 android:id="@+id/btn_price_2"
                                 android:layout_width="68.33dp"
@@ -205,7 +204,6 @@
                                 android:text="2"
                                 android:gravity="center"
                                 />
-
                             <TextView
                                 android:id="@+id/btn_price_3"
                                 android:layout_width="68.33dp"
@@ -216,7 +214,6 @@
                                 android:text="3"
                                 android:gravity="center"
                                 />
-
                         </LinearLayout>
 
                         <LinearLayout

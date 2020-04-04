@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:background="@color/colorBlue">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Local Backup"
+        android:textSize="20dp"
+        android:textColor="@color/colorOrange"
+        android:layout_marginLeft="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/lt_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:background="?android:selectableItemBackground"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Backup "
+            android:textSize="20dp"
+            android:textColor="@color/mdtp_white"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Backup file will be saved to DailyMoney Folder  "
+            android:textSize="15dp"
+            android:textColor="@color/colorLightGrey"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lt_restore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:background="?android:selectableItemBackground"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Restore"
+            android:textSize="20dp"
+            android:textColor="@color/mdtp_white"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="restore file will read from DailyMoney fold "
+            android:textSize="15dp"
+            android:textColor="@color/colorLightGrey"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorLightGrey"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Cloud Backup"
+        android:textSize="20dp"
+        android:textColor="@color/colorOrange"
+        android:layout_marginLeft="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/lt_remote_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:background="?android:selectableItemBackground"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Backup "
+            android:textSize="20dp"
+            android:textColor="@color/mdtp_white"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Backup file will be saved to Google Driver"
+            android:textSize="15dp"
+            android:textColor="@color/colorLightGrey"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lt_rremote_estore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:background="?android:selectableItemBackground"
+        android:focusable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Restore"
+            android:textSize="20dp"
+            android:textColor="@color/mdtp_white"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="restore file will read from Google Driver "
+            android:textSize="15dp"
+            android:textColor="@color/colorLightGrey"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorLightGrey"
+        />
+
+</LinearLayout>

@@ -2,10 +2,13 @@ package com.example.dailymoney;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,8 +27,8 @@ public class Login extends AppCompatActivity {
     private TextView tvRegister,tvfindpw;
     private Toolbar toolbar;
     private Button BtnLogin;
-    private String username,pw,encryptionPw,encryptionUsername,usPw;
-
+    private String username,pw,encryptionPw,encryptionUsername,usPw,userid;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +40,10 @@ public class Login extends AppCompatActivity {
         //set Status bar
         setStatus();
         initToolbar();
-
         initLogin();
 
     }
-    @Override
-    public void setTitle(CharSequence title) {
-        TextView tvTitle = findViewById(R.id.title);
 
-        if (tvTitle != null) {
-            tvTitle.setText(title);
-        }
-    }
     // status bar
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -59,22 +54,17 @@ public class Login extends AppCompatActivity {
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+    public boolean getloginstatus(){
+        return sp.getBoolean("isLogin", false);
+    }
 
-                Intent intent = new Intent(Login.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+    private void  checkLoginStatus(){
+        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        if (getloginstatus()){
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -85,7 +75,7 @@ public class Login extends AppCompatActivity {
         tvRegister = (TextView) findViewById(R.id.tv_register);
         tvfindpw = (TextView) findViewById(R.id.tv_find_pw);
         BtnLogin = findViewById(R.id.btn_login);
-
+        checkLoginStatus();
 
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +134,7 @@ public class Login extends AppCompatActivity {
         Cursor c = db.getUsPw(userName);
         c.moveToFirst();
         if(c.getCount() != 0){
+            userid = c.getString(c.getColumnIndex("userid"));
             userPassword  = c.getString(c.getColumnIndex("userPassword"));
         }
         db.close();
@@ -151,9 +142,11 @@ public class Login extends AppCompatActivity {
     }
     private void saveLoginStatus(boolean status,String userName){
 ;
-        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
 
         SharedPreferences.Editor editor=sp.edit();
+
+        editor.putString("userid", userid);
 
         editor.putBoolean("isLogin", status);
 

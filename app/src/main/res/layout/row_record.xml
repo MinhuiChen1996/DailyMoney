@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent">
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/colorBlue"
+        android:layout_marginTop="20dp">
         <TextView
-            android:id="@+id/pname"
+            android:id="@+id/name"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="name"
+            android:textColor="@color/mdtp_white"
             android:textSize="18sp"/>
-
         <TextView
-            android:id="@+id/pamount"
+            android:id="@+id/amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="amount"
+            android:textColor="@color/mdtp_white"
             android:layout_alignParentRight="true"
             android:textSize="18sp" />
-
         <TextView
-            android:id="@+id/pdate"
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/pamount"
+            android:layout_below="@+id/amount"
             android:layout_alignParentRight="true"
             android:text="date"
+            android:textColor="@color/mdtp_white"
             android:textSize="18sp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/pamount"
+            android:layout_toLeftOf="@+id/amount"
             android:text="€"
+            android:textColor="@color/mdtp_white"
             android:textSize="18sp" />
         <TextView
-            android:id="@+id/premark"
+            android:id="@+id/memo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/pname"
-            android:text="remark"
+            android:layout_below="@+id/name"
+            android:text="memo"
+            android:textColor="@color/mdtp_white"
             android:textSize="18sp" />
-        <TableRow
-            android:id="@+id/line"
-            android:layout_below="@+id/pdate"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#444"
-            >
-        </TableRow>
     </RelativeLayout>
 
 </LinearLayout>

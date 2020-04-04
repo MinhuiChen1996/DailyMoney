@@ -4,40 +4,40 @@
     <item
         android:id="@+id/details"
         android:checked="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/details"
         android:title="Details" />
-
+    <item
+        android:id="@+id/search"
+        android:checked="true"
+        android:icon="@drawable/search"
+        android:title="Search" />
     <item
         android:id="@+id/bar_chart"
         android:checked="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/barchart"
         android:title="Bar Chart" />
     <item
         android:id="@+id/pie_chart"
         android:checked="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/piechart"
         android:title="Pie Chart" />
 
     <group android:id="@+id/id">
         <item
             android:id="@+id/navigation_export"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/export"
             android:title="Export" />
         <item
+            android:id="@+id/navigation_backupAndRestore"
+            android:icon="@drawable/backup"
+            android:title="Backup &amp; Restore" />
+        <item
             android:id="@+id/navigation_setting"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/setting"
             android:title="Setting" />
         <item
-            android:id="@+id/navigation_backup"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Backup" />
-        <item
-            android:id="@+id/navigation_policy"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Policy" />
-        <item
             android:id="@+id/navigation_about"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/about"
             android:title="About" />
 
     </group>

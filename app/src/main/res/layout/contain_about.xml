@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:background="@color/colorBlue">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Version: 1.0.0"
+        android:textColor="@color/mdtp_white"
+        android:textSize="20dp" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/mdtp_white"
+        />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Introduction"
+        android:textSize="20dp"
+        android:textColor="@color/mdtp_white"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="      A lightweight billing application for user to simple record of revenue and expenditure. User can manually add record or using voice recognition to automatically fill in information."
+        android:textSize="15dp"
+        android:textColor="@color/colorLightGrey"
+        android:layout_marginLeft="10dp"/>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/mdtp_white"
+        />
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tips of Voice recognize"
+        android:textSize="20dp"
+        android:textColor="@color/mdtp_white"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The following exmaple will get better result for voice recognition."
+        android:textSize="15dp"
+        android:textColor="@color/colorLightGrey"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1: Apple €5."
+        android:textSize="15dp"
+        android:textColor="@color/colorLightGrey"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2: Apple 5 Euros."
+        android:textSize="15dp"
+        android:textColor="@color/colorLightGrey"
+        android:layout_marginLeft="10dp"/>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/mdtp_white"
+        />
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Contact developer"
+        android:textSize="20dp"
+        android:textColor="@color/mdtp_white"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="If you have any question or suggestions, please feel free to contact developer."
+        android:textSize="15dp"
+        android:textColor="@color/colorLightGrey"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/tv_contactEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Emial: D17125347@mytudublin.com"
+        android:textSize="15dp"
+        android:textColor="@color/colorLightGrey"
+        android:clickable="true"
+        android:autoLink="email"
+        android:layout_marginLeft="10dp"/>
+    />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/mdtp_white"
+        />
+    <TextView
+        android:id="@+id/tv_privacyPolicy"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Privacy Policy"
+        android:textSize="20dp"
+        android:textColor="@color/mdtp_white"
+        android:layout_marginLeft="10dp"/>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/mdtp_white"
+        />
+<!--    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Open Source license"
+        android:textSize="20dp"
+        android:textColor="@color/mdtp_white"
+        android:layout_marginLeft="10dp"/>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/mdtp_white"
+        />-->
+
+</LinearLayout>

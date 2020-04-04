@@ -6,6 +6,13 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
 /**
  * Author: Minhui Chen on 2019/12/1 16:18
  * Summary: database code
@@ -19,9 +26,6 @@ public class Database
     private static final String KEY_USERNAME    = "userName";
     private static final String KEY_USEREMAIL 	= "userEmail";
     private static final String KEY_USERPASSWORD    = "userPassword";
-/*    private static final String KEY_FIRSTNAME    = "firstName";
-    private static final String  KEY_SECONDNAME	    = "secondName";
-    private static final String  KEY_USERDOB	    = "userDOB";*/
     private static final String USER_TABLE 	= "User";
 
     private static final String CREATE_TABLE_USER = "create table User ( userid integer primary key autoincrement, " +
@@ -42,37 +46,47 @@ public class Database
             "userid integer, " +
             "foreign key(userid) references User(userid));";
 
-    private static final String PAYID 	    = "payId";
-    private static final String PCATE 	= "Pcate";
-    private static final String PNAME 	= "Pname";
-    private static final String PAMOUNT    = "Pamount";
-    private static final String PDATE    = "Pdate";
-    private static final String  PTIME	    = "Ptime";
-    private static final String  PREMARK	    = "Premark";
-    private static final String PAY_TABLE 	= "Pay";
+    private static final String RECORDID 	    = "recordId";
+    private static final String TYPE 	= "type";
+    private static final String CATE 	= "cate";
+    private static final String NAME 	= "name";
+    private static final String AMOUNT    = "amount";
+    private static final String DATE    = "date";
+    private static final String TIME	    = "time";
+    private static final String MEMO	    = "memo";
+    private static final String RECORD_TABLE 	= "Record";
 
-    private static final String CREATE_TABLE_PAY = "create table Pay (payId integer primary key autoincrement, " +
-            "Pcate text," +
-            "Pname text," +
-            "Pamount number, "+
-            "Pdate text, "+
-            "Ptime text, "+
-            "Premark text, " +
+    private static final String CREATE_TABLE_RECORD = "create table Record (recordId integer primary key autoincrement, " +
+            "type text," +
+            "cate text," +
+            "name text," +
+            "amount number, "+
+            "date text, "+
+            "time text, "+
+            "memo text, " +
             "Aname text, " +
-            "foreign key(Aname) references Account(Aname));";
+            "userid integer, " +
+            "foreign key(Aname) references Account(Aname),"+
+            "foreign key(userid) references User(userid));";
+            ;
 
-    private static final String DATABASE_NAME 	= "DailyMoneyDB";
+    private static final String DATABASE_NAME 	= "DailyMoneyDB.db";
     private static final int DATABASE_VERSION 	= 1;
 
-    private final Context context;
+
+
+    private Context mContext;
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
+
+
+
     // Constructor
     public Database(Context ctx)
     {
         //
-        this.context 	= ctx;
-        DBHelper 		= new DatabaseHelper(context);
+        this.mContext 	= ctx;
+        DBHelper 		= new DatabaseHelper(mContext);
     }
 
     public Database open() throws SQLException
@@ -84,6 +98,7 @@ public class Database
     // ///////////////////////nested dB helper class ///////////////////////////////////////
     private static class DatabaseHelper extends SQLiteOpenHelper
     {
+
         //
         DatabaseHelper(Context context)
         {
@@ -95,7 +110,7 @@ public class Database
         {
             db.execSQL(CREATE_TABLE_USER);
             db.execSQL(CREATE_TABLE_ACCOUNT);
-            db.execSQL(CREATE_TABLE_PAY);
+            db.execSQL(CREATE_TABLE_RECORD);
         }
         @Override
         //
@@ -187,96 +202,174 @@ public class Database
                 null, null, null, null, null);
     }
 
-    public Cursor getAllPay()
+    public Cursor getAllRecord()
     {
-        return db.query(PAY_TABLE, new String[]
+        return db.query(RECORD_TABLE, new String[]
                         {
-                                PAYID +" as _id",
-                                PCATE,
-                                PNAME,
-                                PAMOUNT,
-                                PDATE,
-                                PTIME,
-                                PREMARK,
-                                ACCOUNTNAME
+                                RECORDID +" as _id",
+                                TYPE,
+                                CATE,
+                                NAME,
+                                AMOUNT,
+                                DATE,
+                                TIME,
+                                MEMO,
+                                ACCOUNTNAME,
+                                KEY_USERID
                         },
-                null, null, null, null, "date("+PDATE+") desc"
+                null, null, null, null, "date("+DATE+") desc"
         );
     }
 
-    public Cursor seearchPay(String str){
-        String[] selectionArgs = {"%"+str+"%","%"+str+"%","%"+str+"%","%"+str+"%","%"+str+"%"};
-        return db.query(PAY_TABLE, new String[]
+    public Cursor seearchRecord(String str, String userid){
+        String[] selectionArgs = {"%"+str+"%","%"+str+"%","%"+str+"%","%"+str+"%","%"+str+"%",userid};
+        return db.query(RECORD_TABLE, new String[]
                         {
-                                PAYID +" as _id",
-                                PCATE,
-                                PNAME,
-                                PAMOUNT,
-                                PDATE,
-                                PTIME,
-                                PREMARK,
-                                ACCOUNTNAME
+                                RECORDID +" as _id",
+                                TYPE,
+                                CATE,
+                                NAME,
+                                AMOUNT,
+                                DATE,
+                                TIME,
+                                MEMO,
+                                ACCOUNTNAME,
+                                KEY_USERID
                         },
-                PCATE+" like ? or "+PNAME+" like ? or " +PAMOUNT+" like ? or "+PREMARK+" like ? or "+ACCOUNTNAME+" like ?", selectionArgs, null, null, "date("+PDATE+") desc"
+                CATE+" like ? or "+NAME+" like ? or " +AMOUNT+" like ? or "+MEMO+" like ? or "+ACCOUNTNAME+" like ? and "+KEY_USERID+"=?", selectionArgs, null, null, "date("+DATE+") desc"
         );
     }
-    public Cursor barChartPay(String str){
-        String[] selectionArgs = {str+"%"};
-        return db.query(PAY_TABLE, new String[]
+    public Cursor barChartPay(String str,String Type,String userid){
+        String[] selectionArgs = {str+"%",Type,userid};
+        return db.query(RECORD_TABLE, new String[]
                         {
-                                PAYID +" as _id",
-                                "sum("+PAMOUNT+") as dayTotal",
-                                PDATE
+                                RECORDID +" as _id",
+                                "sum("+AMOUNT+") as dayTotal",
+                                TYPE,
+                                DATE,
+                                KEY_USERID
+
                         },
-                PDATE+" like ?", selectionArgs, PDATE,null, "date("+PDATE+") asc"
+                DATE+" like ? and "+TYPE+"=? and "+KEY_USERID+"=?", selectionArgs, DATE,null, "date("+DATE+") asc"
         );
     }
-    public Cursor pieChartPay(String str){
-        String[] selectionArgs = {str+"%"};
-        return db.query(PAY_TABLE, new String[]
+    public Cursor pieChartPay(String str,String Type,String userid){
+        String[] selectionArgs = {str+"%",Type,userid};
+        return db.query(RECORD_TABLE, new String[]
                         {
-                                PAYID +" as _id",
-                                PCATE,
-                                "sum("+PAMOUNT+") as cateTotal"
+                                RECORDID +" as _id",
+                                TYPE,
+                                CATE,
+                                "sum("+AMOUNT+") as cateTotal",
+                                KEY_USERID
                         },
-                PDATE+" like ?", selectionArgs, PCATE,null, null
+                DATE+" like ? and "+TYPE+"=? and "+KEY_USERID+"=?", selectionArgs, CATE,null, null
 
         );
     }
-    public Cursor monthPay(String str){
-        String[] selectionArgs = {str+"%"};
-        return db.query(PAY_TABLE, new String[]
+    public Cursor monthRecord(String str,String userid){
+        String[] selectionArgs = {str+"%",userid};
+        return db.query(RECORD_TABLE, new String[]
                         {
-                                PAYID +" as _id",
-                                PCATE,
-                                PNAME,
-                                PAMOUNT,
-                                PDATE,
-                                PTIME,
-                                PREMARK,
+                                RECORDID +" as _id",
+                                TYPE,
+                                CATE,
+                                NAME,
+                                AMOUNT,
+                                DATE,
+                                TIME,
+                                MEMO,
                                 ACCOUNTNAME
                         },
-                PDATE+" like ?", selectionArgs, null, null, "date("+PDATE+") desc"
+                DATE+" like ? and "+KEY_USERID+"=?", selectionArgs, null, null, "date("+DATE+") desc"
         );
     }
 
-    public boolean deletePay(Integer payid)
+    public boolean deletePay(Integer rid)
     {
         //
-        return db.delete(PAY_TABLE, PAYID + "=" + payid, null) > 0;
+        return db.delete(RECORD_TABLE, RECORDID + "=" + rid, null) > 0;
     }
 
-    public long insertPay(String pcate,String pname, Double pamount,String pdate, String ptime, String premark,String accountName)
+    public long insertRecord(String type, String cate,String name, Double amount,String date, String time, String memo,String accountName, String userid)
     {
         ContentValues initialValues = new ContentValues();
-        initialValues.put(PCATE, pcate);
-        initialValues.put(PNAME, pname);
-        initialValues.put(PAMOUNT, pamount);
-        initialValues.put(PDATE, pdate);
-        initialValues.put(PTIME, ptime);
-        initialValues.put(PREMARK, premark);
+        initialValues.put(TYPE, type);
+        initialValues.put(CATE, cate);
+        initialValues.put(NAME, name);
+        initialValues.put(AMOUNT, amount);
+        initialValues.put(DATE, date);
+        initialValues.put(TIME, time);
+        initialValues.put(MEMO, memo);
         initialValues.put(ACCOUNTNAME, accountName);
-        return db.insert(PAY_TABLE, null, initialValues);
+        initialValues.put(KEY_USERID, userid);
+        return db.insert(RECORD_TABLE, null, initialValues);
+    }
+
+    public void backup(String outFileName) {
+
+        //database path
+        final String inFileName = mContext.getDatabasePath(DATABASE_NAME).toString();
+        Log.d("inFileName",inFileName);
+
+        try {
+
+            File dbFile = new File(inFileName);
+            FileInputStream fis = new FileInputStream(dbFile);
+
+            // Open the empty db as the output stream
+            OutputStream output = new FileOutputStream(outFileName);
+
+            // Transfer bytes from the input file to the output file
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+
+            // Close the streams
+            output.flush();
+            output.close();
+            fis.close();
+
+            Toast.makeText(mContext, "Backup Completed", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(mContext, "Unable to backup database. Retry", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    public void importDB(String inFileName) {
+
+        final String outFileName = mContext.getDatabasePath(DATABASE_NAME).toString();
+
+        try {
+
+            File dbFile = new File(inFileName);
+            FileInputStream fis = new FileInputStream(dbFile);
+
+            // Open the empty db as the output stream
+            OutputStream output = new FileOutputStream(outFileName);
+
+            // Transfer bytes from the input file to the output file
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+
+            // Close the streams
+            output.flush();
+            output.close();
+            fis.close();
+
+            Toast.makeText(mContext, "Import Completed", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(mContext, "Unable to import database. Retry", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
 }

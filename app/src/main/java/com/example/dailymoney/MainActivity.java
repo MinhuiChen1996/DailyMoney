@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton add;
     private FloatingActionButton voice;
 
-    private TextView textView,monthYear,tv_login,nav_username;
+    private TextView monthYear,tv_logout,nav_username,income, expense, balance;
 
     private Intent intent;
 
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     SimpleCursorAdapter myAdapter;
     private Database db;
-    String[] columns = new String[] {"Pname","Pdate","Premark","Pamount"};
-    int[] recordList = new int []{ R.id.pname, R.id.pdate, R.id.premark, R.id.pamount};
+    String[] columns = new String[] {"name","date","memo","amount"};
+    int[] recordList = new int []{ R.id.name, R.id.date, R.id.memo, R.id.amount};
 
     public ArrayAdapter mList;
 
@@ -68,18 +68,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private RelativeLayout date_picker_button;
 
-    private String strDe,monthYearStr,strDate,speech,username;
+    private String strDe,monthYearStr,strDate,speech,username,userid;
     private View headerview;
     SharedPreferences sp;
+    Calendar c;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mListView= (ListView) findViewById(R.id.list);
+
+        db = new Database(this);
+
         //set Status bar
         setStatus();
-
-        textView = (TextView) findViewById(R.id.tv_main);
         //set Toolbar
         initToolbar();
 
@@ -93,43 +95,63 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // setting for navagtion view
         initgNavagationView();
 
+        mListView= (ListView) findViewById(R.id.list);
+        income = (TextView) findViewById(R.id.tv_income);
+        expense = (TextView) findViewById(R.id.tv_expense);
+        balance = (TextView) findViewById(R.id.tv_balance);
+
+
         setTitle("Daily Money");
         headerview = navigationView.getHeaderView(0);
-        tv_login = (TextView)headerview.findViewById(R.id.nav_loginStatus);
-
-        checkLogin();
-
-
-
-        tv_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String login_text = tv_login.getText().toString();
-                if(login_text.equals("Login")){
-                    Intent intent = new Intent(MainActivity.this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else if(login_text.equals("Logout")){
-                    SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-                    SharedPreferences.Editor editor=sp.edit();
-                    editor.putBoolean("isLogin", false);
-                    editor.putString("loginUserName", "");
-                    editor.commit();
-                    nav_username.setText("");
-                    tv_login.setText("Login");
-                    Toast.makeText(MainActivity.this, "Logout successful.", Toast.LENGTH_SHORT).show();
-                    finish();
-                    startActivity(getIntent());
-                }
-            }
-        });
+        tv_logout = (TextView)headerview.findViewById(R.id.nav_logout);
 
         monthYear = (TextView) findViewById(R.id.date_picker_text_view);
         date_picker_button = (RelativeLayout)findViewById(R.id.date_picker_button);
 
+        checkLogin();
+
+        tv_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
+
+
+        strDe = currentMonthYear();
+        userid = getuserid();
+        initListRecord(strDe,userid);
+
+        date_picker_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                strDe = initMonthYearPicker();
+                initListRecord(strDe,userid);
+            }
+        });
+
+
+
+    }
+    private void logout(){
+        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        SharedPreferences.Editor editor=sp.edit();
+        editor.putBoolean("isLogin", false);
+        editor.putString("loginUserName", "");
+        editor.putString("userid", "");
+        editor.commit();
+        nav_username.setText("");
+        Toast.makeText(MainActivity.this, "Logout successful.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, Login.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    private String currentMonthYear(){
         // current month & year
-        Calendar c = Calendar.getInstance();
+        c = Calendar.getInstance();
         int cYear = c.get(Calendar.YEAR);
         int cMonth = c.get(Calendar.MONTH);
         c.set(cYear,cMonth,01);
@@ -137,34 +159,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         strDate = sdf.format(c.getTime());
         monthYear.setText(strDate);
         strDe = mY.format(c.getTime());
-        initListRecord(strDe);
+        return strDe;
+    }
 
-        date_picker_button.setOnClickListener(new View.OnClickListener() {
+    private String initMonthYearPicker(){
+        MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
+        pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onClick(View v) {
-                MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
-                pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
-                        monthYearStr = year + "-" + (month + 1) + "-" + i2;
-                        c.set(year,month,i2);
-                        strDe = mY.format(c.getTime());
-                        initListRecord(strDe);
-                        monthYear.setText(formatMonthYear(monthYearStr));
-
-                    }
-                });
-                pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+            public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
+                monthYearStr = year + "-" + (month + 1) + "-" + i2;
+                c.set(year,month,i2);
+                strDe = mY.format(c.getTime());
+                monthYear.setText(formatMonthYear(monthYearStr));
             }
         });
-
-
-
+        pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+        return strDe;
     }
-    private void initListRecord(String str){
-        db = new Database(this);
+
+    private String exportMonthYear(){
+        MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
+        pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
+                c.set(year,month,i2);
+                strDe = mY.format(c.getTime());
+            }
+        });
+        pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+        return strDe;
+    }
+
+    private void exportData(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final CharSequence[] items = {"Month", "Add Exam"};
+
+        builder.setTitle("Export Data");
+
+
+        builder.show();
+    }
+
+    private void initListRecord(String str,String uid){
+
         db.open();
-        Cursor c = db.monthPay(str);
+        Cursor c = db.monthRecord(str,uid);
         myAdapter = new SimpleCursorAdapter(this, R.layout.row_record, c, columns,recordList);
         mListView.setAdapter(myAdapter);
         db.close();
@@ -237,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // menu setting
     private void initgNavagationView() {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
     }
     // close drawer
@@ -264,8 +305,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.details:
                 break;
+            case R.id.search:
+                intent = new Intent(MainActivity.this, search.class);
+                startActivity(intent);
+                finish();
+                break;
             case R.id.bar_chart:
-                Intent intent = new Intent(MainActivity.this, barchart.class);
+                intent = new Intent(MainActivity.this, barchart.class);
                 startActivity(intent);
                 finish();
                 break;
@@ -275,21 +321,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
                 break;
             case R.id.navigation_export:
-                textView.setText(item.getTitle());
+                strDe = exportMonthYear();
+                db.open();
+                Cursor c = db.monthRecord(strDe,userid);
+
+                db.close();
+
                 break;
             case R.id.navigation_setting:
-                textView.setText(item.getTitle());
                 break;
-            case R.id.navigation_backup:
-                textView.setText(item.getTitle());
-                break;
-            case R.id.navigation_policy:
-                Uri uri = Uri.parse("https://daily-money-0.flycricket.io/privacy.html"); // missing 'http://' will cause crashed
-                intent = new Intent(Intent.ACTION_VIEW, uri);
+            case R.id.navigation_backupAndRestore:
+                intent = new Intent(MainActivity.this, backupAndrestrore.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.navigation_about:
-                textView.setText(item.getTitle());
+                intent = new Intent(MainActivity.this, about.class);
+                startActivity(intent);
+                finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -329,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    // add menu in toolbar
+ /*  // add menu in toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_menu, menu);
@@ -347,20 +396,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
+
     private void checkLogin(){
 
         sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        if (loginstatus()){
+        if (getloginstatus()){
             username = sp.getString("loginUserName","");
             nav_username = (TextView)headerview.findViewById(R.id.nav_username);
-            nav_username.setText(username);
-            tv_login.setText("Logout");
+            nav_username.setText("Hi "+username);
+        }
+        else{
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+            finish();
         }
     }
-    public boolean loginstatus(){
+    public boolean getloginstatus(){
         return sp.getBoolean("isLogin", false);
     }
 
+    private String getuserid(){
+        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid","");
+    }
 
 }

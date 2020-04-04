@@ -2,6 +2,7 @@ package com.example.dailymoney;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -43,6 +44,8 @@ public class piechart extends AppCompatActivity {
     private String strDe,monthYearStr,strDate;
 
     PieChart pieChart;
+    SharedPreferences sp;
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -67,7 +70,9 @@ public class piechart extends AppCompatActivity {
         strDate = sdf.format(c.getTime());
         monthYear.setText(strDate);
         strDe = mY.format(c.getTime());
-        initpieChart(strDe);
+
+        String userid = getuserid();
+        initpieChart(strDe,userid);
 
         date_picker_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +84,7 @@ public class piechart extends AppCompatActivity {
                         monthYearStr = year + "-" + (month + 1) + "-" + i2;
                         c.set(year,month,i2);
                         strDe = mY.format(c.getTime());
-                        initpieChart(strDe);
+                        initpieChart(strDe,userid);
                         monthYear.setText(formatMonthYear(monthYearStr));
 
                     }
@@ -90,16 +95,17 @@ public class piechart extends AppCompatActivity {
 
     }
 
-    private void initpieChart(String str){
+    private void initpieChart(String str,String uid){
 
         db.open();
-        Cursor c = db.pieChartPay(str);
+        String type = "expense";
+        Cursor c = db.pieChartPay(str,type, uid);
         ArrayList<String> cate = new ArrayList<>();
         ArrayList<Double> amount = new ArrayList<>();
 
         c.moveToFirst();
         while(!c.isAfterLast()) {
-            cate.add(c.getString(c.getColumnIndex("Pcate")));
+            cate.add(c.getString(c.getColumnIndex("cate")));
             amount.add(c.getDouble(c.getColumnIndex("cateTotal")));
             c.moveToNext();
         }
@@ -167,5 +173,9 @@ public class piechart extends AppCompatActivity {
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
+    }
+    private String getuserid(){
+        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid","");
     }
 }

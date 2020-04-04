@@ -46,7 +46,7 @@ public class MonthYearPickerDialog extends DialogFragment {
         yearPicker.setMinValue(2000);
         yearPicker.setMaxValue(year);
         yearPicker.setValue(year);
-
+        builder.setTitle("Pick Month & Year");
         builder.setView(dialog)
                 // Add action buttons
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
