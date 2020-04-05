@@ -4,19 +4,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.RecognizerIntent;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +30,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
@@ -33,6 +40,10 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton add;
     private FloatingActionButton voice;
 
-    private TextView monthYear,tv_logout,nav_username,income, expense, balance;
+    private TextView monthYear,tv_logout,nav_username,tv_income, tv_expense, tv_balance;
 
     private Intent intent;
 
@@ -72,7 +83,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View headerview;
     SharedPreferences sp;
     Calendar c;
-
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    public static final int REQUEST_CODE_PERMISSIONS = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initgNavagationView();
 
         mListView= (ListView) findViewById(R.id.list);
-        income = (TextView) findViewById(R.id.tv_income);
-        expense = (TextView) findViewById(R.id.tv_expense);
-        balance = (TextView) findViewById(R.id.tv_balance);
+        tv_income = (TextView) findViewById(R.id.tv_income);
+        tv_expense = (TextView) findViewById(R.id.tv_expense);
+        tv_balance = (TextView) findViewById(R.id.tv_balance);
 
 
         setTitle("Daily Money");
@@ -122,12 +137,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         strDe = currentMonthYear();
         userid = getuserid();
         initListRecord(strDe,userid);
+        setBalance(strDe,userid);
 
         date_picker_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 strDe = initMonthYearPicker();
                 initListRecord(strDe,userid);
+                setBalance(strDe,userid);
             }
         });
 
@@ -146,6 +163,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
         finish();
+    }
+
+    private void setBalance(String date, String userid){
+        db.open();
+        Cursor expenseC = db.sumMonth(date,"expense",userid);
+
+        double expense,income,balance;
+
+        int i=expenseC.getCount();
+
+        if(expenseC.getCount()>0){
+            expenseC.moveToFirst();
+            expense=expenseC.getDouble(expenseC.getColumnIndex("Total"));
+            expenseC.moveToNext();
+        }else{
+            expense=0;
+        }
+
+        Cursor incomeC = db.sumMonth(date,"income",userid);
+        int y=incomeC.getCount();
+        if(incomeC.getCount()>0){
+            incomeC.moveToFirst();
+            income=incomeC.getDouble(expenseC.getColumnIndex("Total"));
+            incomeC.moveToNext();
+        } else{
+            income=0;
+        }
+
+        balance = income-expense;
+        tv_income.setText(Double.toString(income));
+        tv_expense.setText(Double.toString(expense));
+        tv_balance.setText(Double.toString(balance));
+
+        db.close();
     }
 
 
@@ -188,17 +239,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
         return strDe;
-    }
-
-    private void exportData(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        final CharSequence[] items = {"Month", "Add Exam"};
-
-        builder.setTitle("Export Data");
-
-
-        builder.show();
     }
 
     private void initListRecord(String str,String uid){
@@ -322,11 +362,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.navigation_export:
                 strDe = exportMonthYear();
-                db.open();
-                Cursor c = db.monthRecord(strDe,userid);
-
-                db.close();
-
+                Log.d("export",strDe);
+                createCSV(strDe);
                 break;
             case R.id.navigation_setting:
                 break;
@@ -421,4 +458,95 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return sp.getString("userid","");
     }
 
+
+    //check permissions.
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have read or write permission
+        int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int readPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_CODE_PERMISSIONS
+            );
+        }
+    }
+
+    public void createCSV(String str){
+        verifyStoragePermissions(this);
+        boolean success = true;
+        File folder = new File(Environment.getExternalStorageDirectory() + File.separator + this.getResources().getString(R.string.app_name));
+
+        if (!folder.exists())
+            success = folder.mkdirs();
+        if (success) {
+            String filename = folder.toString() + File.separator;
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("CSV file Name");
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            builder.setPositiveButton("Save", (dialog, which) -> {
+                String m_Text = input.getText().toString();
+                String out = filename + m_Text + ".csv";
+                writeToCSVfile(str,userid,out);
+
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder.show();
+        } else
+            Toast.makeText(this, "Unable to create directory. Retry", Toast.LENGTH_SHORT).show();
+
+
+
+/*        return filename;*/
+    }
+
+    private void writeToCSVfile(String str, String userid, String filename){
+
+        db.open();
+        Cursor c = db.monthRecord(str,userid);
+
+        FileWriter fw = null;
+        try {
+            int rowcount = 0;
+            int colcount = 0;
+
+            fw = new FileWriter(filename);
+            BufferedWriter bw  = new BufferedWriter(fw);
+            rowcount = c.getCount();
+            colcount = c.getColumnCount();
+
+            if (rowcount > 0 )
+                c.moveToFirst();
+            for (int i = 0 ; i < colcount; i++)
+            {
+                if (i != colcount -1){
+                    bw.write(c.getColumnName(i) + ",");
+                }
+                else {
+                    bw.write(c.getColumnName(i));
+                }
+            }
+            bw.write("\r\n");
+            for (int i = 0; i < rowcount;i++) {
+                c.moveToPosition(i);
+                for (int j = 0; j < colcount; j++) {
+                    if (j != colcount - 1) {
+                        bw.write(c.getString(j) + ",");
+                    } else {
+                        bw.write(c.getString(j));
+                    }
+                }
+                bw.write("\r\n");
+                bw.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        db.close();
+    }
 }

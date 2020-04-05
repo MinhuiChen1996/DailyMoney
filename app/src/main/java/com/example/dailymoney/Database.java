@@ -54,6 +54,7 @@ public class Database
     private static final String DATE    = "date";
     private static final String TIME	    = "time";
     private static final String MEMO	    = "memo";
+    private static final String RACCOUNT	    = "account";
     private static final String RECORD_TABLE 	= "Record";
 
     private static final String CREATE_TABLE_RECORD = "create table Record (recordId integer primary key autoincrement, " +
@@ -64,9 +65,9 @@ public class Database
             "date text, "+
             "time text, "+
             "memo text, " +
-            "Aname text, " +
+            "account text, " +
             "userid integer, " +
-            "foreign key(Aname) references Account(Aname),"+
+            "foreign key(account) references Account(Aname),"+
             "foreign key(userid) references User(userid));";
             ;
 
@@ -214,7 +215,7 @@ public class Database
                                 DATE,
                                 TIME,
                                 MEMO,
-                                ACCOUNTNAME,
+                                RACCOUNT,
                                 KEY_USERID
                         },
                 null, null, null, null, "date("+DATE+") desc"
@@ -233,10 +234,10 @@ public class Database
                                 DATE,
                                 TIME,
                                 MEMO,
-                                ACCOUNTNAME,
+                                RACCOUNT,
                                 KEY_USERID
                         },
-                CATE+" like ? or "+NAME+" like ? or " +AMOUNT+" like ? or "+MEMO+" like ? or "+ACCOUNTNAME+" like ? and "+KEY_USERID+"=?", selectionArgs, null, null, "date("+DATE+") desc"
+                CATE+" like ? or "+NAME+" like ? or " +AMOUNT+" like ? or "+MEMO+" like ? or "+RACCOUNT+" like ? and "+KEY_USERID+"=?", selectionArgs, null, null, "date("+DATE+") desc"
         );
     }
     public Cursor barChartPay(String str,String Type,String userid){
@@ -267,6 +268,21 @@ public class Database
 
         );
     }
+
+    public Cursor sumMonth(String str,String Type,String userid){
+        String[] selectionArgs = {str+"%",Type,userid};
+        return db.query(RECORD_TABLE, new String[]
+                        {
+                                RECORDID +" as _id",
+                                TYPE,
+                                "sum("+AMOUNT+") as Total",
+                                KEY_USERID
+                        },
+                DATE+" like ? and "+TYPE+"=? and "+KEY_USERID+"=?", selectionArgs,null,null, null
+
+        );
+    }
+
     public Cursor monthRecord(String str,String userid){
         String[] selectionArgs = {str+"%",userid};
         return db.query(RECORD_TABLE, new String[]
@@ -279,7 +295,7 @@ public class Database
                                 DATE,
                                 TIME,
                                 MEMO,
-                                ACCOUNTNAME
+                                RACCOUNT
                         },
                 DATE+" like ? and "+KEY_USERID+"=?", selectionArgs, null, null, "date("+DATE+") desc"
         );
@@ -301,7 +317,7 @@ public class Database
         initialValues.put(DATE, date);
         initialValues.put(TIME, time);
         initialValues.put(MEMO, memo);
-        initialValues.put(ACCOUNTNAME, accountName);
+        initialValues.put(RACCOUNT, accountName);
         initialValues.put(KEY_USERID, userid);
         return db.insert(RECORD_TABLE, null, initialValues);
     }

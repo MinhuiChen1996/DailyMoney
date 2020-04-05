@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dailymoney">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,20 +12,24 @@
         android:roundIcon="@drawable/money"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".about"
-            android:label="About"></activity>
-        <activity android:name=".backupAndrestrore"
-            android:label="Backup And Restore"/>
-        <activity android:name=".barchart"/>
-        <activity android:name=".piechart"/>
+        <activity android:name=".income"></activity>
+        <activity
+            android:name=".about"
+            android:label="About" />
+        <activity
+            android:name=".backupAndrestrore"
+            android:label="Backup And Restore" />
+        <activity android:name=".barchart" />
+        <activity android:name=".piechart" />
         <activity
             android:name=".search"
             android:label="Search" />
         <activity
             android:name=".Record"
             android:label="Record" />
-        <activity android:name=".Register"
-            android:label="Register"/>
+        <activity
+            android:name=".Register"
+            android:label="Register" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Login">
             <intent-filter>
