@@ -221,25 +221,45 @@ public class Record extends AppCompatActivity {
                 String input = ((TextView) view).getText().toString();
                 if (input == null){
                     newAmount.setText(input);
-                }else if (input != null) {
+                }else if (input != null ) {
                     String strTmp = newAmount.getText().toString();
-                    strTmp += input;
-                    newAmount.setText(strTmp);
+
+                    if(strTmp.contains(".")){
+                        if (strTmp.length() - 1 - strTmp.toString().indexOf(".") == 2){
+                            newAmount.setText(strTmp);
+                        }
+                        else{
+                            strTmp += input;
+                            newAmount.setText(strTmp);
+                        }
+                    }else{
+                        strTmp += input;
+                        newAmount.setText(strTmp);
+                    }
                 }
                 newAmount.setTextSize(30);
-                newAmount.setTextColor(Color.BLACK);
-            }else if (id == R.id.btn_price_point)//点
+                newAmount.setTextColor(Color.WHITE);
+            }else if (id == R.id.btn_price_point)//point
             {
                 String inputa = ((TextView) view).getText().toString();
                 if (inputa == null){
                     newAmount.setText(inputa);
-                }else if (inputa != null) {
+                } else if (inputa != null) {
                     String strTmp = newAmount.getText().toString();
-                    strTmp += inputa;
-                    newAmount.setText(strTmp);
+                    if(strTmp.contains(".")){
+                        newAmount.setText(strTmp);
+                    }else {
+                        strTmp += inputa;
+                        if(strTmp.startsWith(".") && strTmp.trim().length()==1){
+                            strTmp="0"+strTmp;
+                            newAmount.setText(strTmp);
+                        }else{
+                            newAmount.setText(strTmp);
+                        }
+                    }
                 }
                 newAmount.setTextSize(30);
-                newAmount.setTextColor(Color.BLACK);
+                newAmount.setTextColor(Color.WHITE);
             } else if (id == R.id.btn_ok) {//save
 
                 String date = newDate.getText().toString();
@@ -283,7 +303,7 @@ public class Record extends AppCompatActivity {
                     newAmount.setText("");
                 }
                 newAmount.setTextSize(30);
-                newAmount.setTextColor(Color.BLACK);
+                newAmount.setTextColor(Color.WHITE);
             }
         }
     };
