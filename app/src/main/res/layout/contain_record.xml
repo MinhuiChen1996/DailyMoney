@@ -158,6 +158,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorDarkGrey"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,6 +189,7 @@
                             android:layout_weight="1"
                             android:layout_gravity="bottom">
 
+
                             <TextView
                                 android:id="@+id/btn_price_1"
                                 android:layout_width="68.33dp"
@@ -192,29 +198,54 @@
                                 android:textColor="@android:color/black"
                                 android:textSize="18dp"
                                 android:text="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:gravity="center"
                                 />
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
                             <TextView
                                 android:id="@+id/btn_price_2"
                                 android:layout_width="68.33dp"
                                 android:layout_height="52dp"
                                 android:layout_weight="1"
                                 android:textColor="@android:color/black"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:textSize="18dp"
                                 android:text="2"
                                 android:gravity="center"
                                 />
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
                             <TextView
                                 android:id="@+id/btn_price_3"
                                 android:layout_width="68.33dp"
                                 android:layout_height="52dp"
                                 android:layout_weight="1"
                                 android:textColor="@android:color/black"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:textSize="18dp"
                                 android:text="3"
                                 android:gravity="center"
                                 />
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
                         </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorDarkGrey" />
 
                         <LinearLayout
                             android:layout_width="fill_parent"
@@ -226,10 +257,18 @@
                                 android:layout_height="52dp"
                                 android:layout_weight="1"
                                 android:textColor="@android:color/black"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:textSize="18dp"
                                 android:gravity="center"
                                 android:id="@+id/btn_price_4"
                                 android:text="4" />
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
 
                             <TextView
                                 android:id="@+id/btn_price_5"
@@ -237,9 +276,17 @@
                                 android:layout_height="52dp"
                                 android:layout_weight="1"
                                 android:textColor="@android:color/black"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:textSize="18dp"
                                 android:gravity="center"
                                 android:text="5" />
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
 
                             <TextView
                                 android:id="@+id/btn_price_6"
@@ -248,10 +295,23 @@
                                 android:layout_weight="1"
                                 android:text="6"
                                 android:textColor="@android:color/black"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:textSize="18dp"
                                 android:gravity="center"/>
 
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
+
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorDarkGrey" />
 
                         <LinearLayout
                             android:layout_width="fill_parent"
@@ -267,6 +327,10 @@
                                 android:textSize="18dp"
                                 android:gravity="center"
                                 android:text="7" />
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
 
                             <TextView
                                 android:id="@+id/btn_price_8"
@@ -277,6 +341,10 @@
                                 android:textSize="18dp"
                                 android:gravity="center"
                                 android:text="8" />
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
 
                             <TextView
                                 android:id="@+id/btn_price_9"
@@ -288,7 +356,17 @@
                                 android:gravity="center"
                                 android:text="9" />
 
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
+
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorDarkGrey" />
 
                         <LinearLayout
                             android:layout_width="fill_parent"
@@ -302,19 +380,33 @@
                                 android:layout_height="52dp"
                                 android:layout_weight="1"
                                 android:textColor="@android:color/black"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:textSize="18dp"
                                 android:gravity="center"
                                 android:text="0" />
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
 
                             <TextView
                                 android:id="@+id/btn_price_point"
                                 android:layout_width="68.33dp"
                                 android:layout_height="52dp"
                                 android:textColor="@android:color/black"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:textSize="18dp"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:text="." />
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorDarkGrey"/>
 
                         </LinearLayout>
 
@@ -335,15 +427,22 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="51.6dp"
                                 android:gravity="center"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:id="@+id/btn_price_del"
                                 >
                                 <TextView
                                     android:id="@+id/btn_price_clear"
-                                    android:text="Delete"
+                                    android:drawableLeft="@drawable/delete"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     />
                             </LinearLayout>
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:background="@color/colorDarkGrey" />
 
                             <TextView
                                 android:id="@+id/btn_ok"
@@ -351,6 +450,9 @@
                                 android:layout_height="match_parent"
                                 android:textSize="18dp"
                                 android:gravity="center"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?android:selectableItemBackground"
                                 android:text="Ok" />
                         </LinearLayout>
                     </LinearLayout>
