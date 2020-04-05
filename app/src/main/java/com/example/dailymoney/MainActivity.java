@@ -18,9 +18,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.icu.text.DecimalFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.speech.RecognizerIntent;
 import android.text.InputType;
 import android.util.Log;
@@ -44,6 +46,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -192,9 +195,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         balance = income-expense;
-        tv_income.setText(Double.toString(income));
-        tv_expense.setText(Double.toString(expense));
-        tv_balance.setText(Double.toString(balance));
+
+
+        tv_income.setText(String.format("%.2f", income));
+        tv_expense.setText(String.format("%.2f", expense));
+        tv_balance.setText(String.format("%.2f", balance));
+
 
         db.close();
     }
@@ -548,5 +554,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
         db.close();
+        File file = new File(filename);
+        shareFile(file);
+    }
+
+    private void shareFile(File file) {
+
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
+        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+file.getAbsolutePath()));
+
+        //if you need
+        //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);
+        //intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
+
+        startActivity(Intent.createChooser(intentShareFile, "Share File"));
+
     }
 }
