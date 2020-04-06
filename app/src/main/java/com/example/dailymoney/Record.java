@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,13 +27,21 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.angmarch.views.NiceSpinner;
+import org.angmarch.views.OnSpinnerItemSelectedListener;
+
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 public class Record extends AppCompatActivity {
@@ -49,6 +59,9 @@ public class Record extends AppCompatActivity {
 
     private RadioGroup radgroup;
     SharedPreferences sp;
+
+    private Spinner sp_option;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +71,31 @@ public class Record extends AppCompatActivity {
         setStatus();
         initToolbar();
         setTitle("Record");
+
+        sp_option = (Spinner) findViewById(R.id.sp_option);
+        List<String> optionsList = new LinkedList<>(Arrays.asList("Expense","Income"));
+        ArrayAdapter arr_adapter= new ArrayAdapter<String>(this, R.layout.spinner_item, optionsList);
+        //设置样式
+        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        sp_option.setAdapter(arr_adapter);
+        sp_option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position==1){
+                    Intent intent = new Intent(Record.this, income.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
 
         db = new Database(this);
 
@@ -121,6 +159,7 @@ public class Record extends AppCompatActivity {
                 datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                 datePickerDialog.show();
             }
+
         });
 
        // current time
@@ -128,6 +167,7 @@ public class Record extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         curTime=sdf.format(date);
         newTime.setText(curTime);
+
         newTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

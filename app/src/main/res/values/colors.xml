@@ -10,4 +10,5 @@
     <color name="colorBlue">#6495ED</color>
     <color name="colorLightGrey">#F5F5F5</color>
     <color name="colorOrange">#FF9500</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

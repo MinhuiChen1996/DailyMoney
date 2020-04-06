@@ -98,13 +98,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Backup file will be saved to Google Driver"
+            android:text="The file will automatic backup on your google drive."
             android:textSize="15dp"
             android:textColor="@color/colorLightGrey"
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
-    <LinearLayout
+<!--    <LinearLayout
         android:id="@+id/lt_rremote_estore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
             android:textSize="15dp"
             android:textColor="@color/colorLightGrey"
             android:layout_marginLeft="10dp"/>
-    </LinearLayout>
+    </LinearLayout>-->
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="1dp"

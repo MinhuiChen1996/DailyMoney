@@ -21,13 +21,10 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <RelativeLayout
-                android:id="@+id/date_picker_button"
+                android:id="@+id/RL_option"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:orientation="vertical"
-                android:focusable="true">
+                android:orientation="vertical">
 
                 <View
                     android:id="@+id/centerInParent"
@@ -44,26 +41,16 @@
                     android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                     android:textColor="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/tv_option"
+                <Spinner
+                    android:id="@+id/sp_option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/centerInParent"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                    android:textColor="@android:color/white" />
+                    android:popupBackground="@color/colorBlue"
+                    android:layout_below="@+id/centerInParent"/>
 
-                <ImageView
-                    android:id="@+id/date_picker_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tv_option"
-                    android:layout_toRightOf="@id/tv_option"
-                    app:srcCompat="@drawable/ic_arrow_drop_down"
-                    tools:ignore="ContentDescription,RtlHardcoded" />
+
             </RelativeLayout>
+
 
         </androidx.appcompat.widget.Toolbar>
 

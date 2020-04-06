@@ -26,8 +26,6 @@
             android:background="@color/colorLightBlue"
             android:orientation="vertical">
 
-
-
             <RadioGroup
                 android:id="@+id/radioGroup"
                 android:layout_width="match_parent"

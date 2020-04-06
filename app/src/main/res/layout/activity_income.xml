@@ -4,6 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".income">
+    android:fitsSystemWindows="true"
+    tools:context=".Record">
+
+    <include
+        layout="@layout/app_bar_expense_income"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/contain_income" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

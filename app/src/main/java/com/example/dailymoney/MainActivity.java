@@ -368,7 +368,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.navigation_export:
                 strDe = exportMonthYear();
-                Log.d("export",strDe);
                 createCSV(strDe);
                 break;
             case R.id.navigation_setting:
@@ -498,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             builder.setPositiveButton("Save", (dialog, which) -> {
                 String m_Text = input.getText().toString();
                 String out = filename + m_Text + ".csv";
-                writeToCSVfile(str,userid,out);
+
 
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());

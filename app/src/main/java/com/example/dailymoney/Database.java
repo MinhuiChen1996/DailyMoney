@@ -297,7 +297,7 @@ public class Database
                                 MEMO,
                                 RACCOUNT
                         },
-                DATE+" like ? and "+KEY_USERID+"=?", selectionArgs, null, null, "date("+DATE+") desc"
+                DATE+" like ? and "+KEY_USERID+"=?", selectionArgs, null, null, "date("+DATE+") desc,"+TIME+" asc"
         );
     }
 
