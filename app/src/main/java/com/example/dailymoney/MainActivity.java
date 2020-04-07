@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setBalance(String date, String userid) {
         db.open();
-        Cursor expenseC = db.sumMonth(date, "expense", userid);
+        Cursor expenseC = db.sumMonth(date, "Expense", userid);
 
         double expense, income, balance;
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             expense = 0;
         }
 
-        Cursor incomeC = db.sumMonth(date, "income", userid);
+        Cursor incomeC = db.sumMonth(date, "Income", userid);
 
         if (incomeC.getCount() > 0) {
             incomeC.moveToFirst();

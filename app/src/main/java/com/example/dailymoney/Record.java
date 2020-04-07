@@ -330,9 +330,9 @@ public class Record extends AppCompatActivity {
                     type = "Expense";
 
                     double Ramount = Double.parseDouble(amount);
-                    Ramount = -Ramount;
-
-                    long qid = db.insertRecord(type, Rcate, name, Ramount, date, time, memo, account, userid);
+                    amount = String.format("%.2f", Ramount);
+                    Log.d("amount", amount);
+                    long qid = db.insertRecord(type, Rcate, name, amount, date, time, memo, account, userid);
                     if (qid != -1) {
                         Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
                         finish();

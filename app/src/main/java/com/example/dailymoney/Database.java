@@ -62,7 +62,7 @@ public class Database {
             "type text," +
             "cate text," +
             "name text," +
-            "amount number, " +
+            "amount text, " +
             "date text, " +
             "time text, " +
             "memo text, " +
@@ -310,12 +310,27 @@ public class Database {
         );
     }
 
+    public long updateRecord(String rid,String cate, String name, String amount, String date, String time, String memo, String accountName) {
+        String[] selectionArgs = {rid};
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put(CATE, cate);
+        initialValues.put(NAME, name);
+        initialValues.put(AMOUNT, amount);
+        initialValues.put(DATE, date);
+        initialValues.put(TIME, time);
+        initialValues.put(MEMO, memo);
+        initialValues.put(RACCOUNT, accountName);
+
+        return db.update(RECORD_TABLE, initialValues, RECORDID + "=?",selectionArgs);
+    }
+
     public boolean deleteRocord(String rid) {
         //
         return db.delete(RECORD_TABLE, RECORDID + "=" + rid, null) > 0;
     }
 
-    public long insertRecord(String type, String cate, String name, Double amount, String date, String time, String memo, String accountName, String userid) {
+    public long insertRecord(String type, String cate, String name, String amount, String date, String time, String memo, String accountName, String userid) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(TYPE, type);
         initialValues.put(CATE, cate);

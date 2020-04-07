@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <RadioButton
-                    android:id="@+id/btnFood"
+                    android:id="@+id/btnSalary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -40,21 +40,21 @@
                     android:drawableTop="@drawable/salary"
                     android:text="salary"/>
                 <RadioButton
-                    android:id="@+id/btnDaily"
+                    android:id="@+id/btnSale"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableTop="@drawable/sale"
                     android:text="sale"/>
                 <RadioButton
-                    android:id="@+id/btnClothes"
+                    android:id="@+id/btnInvest"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableTop="@drawable/invest"
                     android:text="invest"/>
                 <RadioButton
-                    android:id="@+id/btnMedical"
+                    android:id="@+id/btnOthers"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -148,7 +148,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:hint="0.00"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     android:textColor="@color/mdtp_white"
                     android:singleLine="true"
                     android:layout_centerInParent="true" />

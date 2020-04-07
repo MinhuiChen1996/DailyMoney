@@ -46,7 +46,7 @@ public class income extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
-    private String speech, userid, strDate, sPrice, pName, curTime, type;
+    private String Ramount, userid, strDate, curTime, type;
 
     private RadioGroup radgroup;
     SharedPreferences sp;
@@ -62,13 +62,14 @@ public class income extends AppCompatActivity {
         //set Status bar
         setStatus();
         initToolbar();
+        setTitle("Record");
 
         sp_option = (Spinner) findViewById(R.id.sp_option);
         List<String> optionsList = new LinkedList<>(Arrays.asList("Income", "Expense"));
         ArrayAdapter arr_adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, optionsList);
-        //设置样式
+        //set style
         arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //加载适配器
+        // set adapter
         sp_option.setAdapter(arr_adapter);
         sp_option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
@@ -340,9 +341,9 @@ public class income extends AppCompatActivity {
                     userid = getuserid();
                     db.open();
                     type = "Income";
-
                     double Ramount = Double.parseDouble(amount);
-                    long qid = db.insertRecord(type, Rcate, name, Ramount, date, time, memo, account, userid);
+                    amount = String.format("%.2f", Ramount);
+                    long qid = db.insertRecord(type, Rcate, name, amount, date, time, memo, account, userid);
                     if (qid != -1) {
                         Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
                         finish();

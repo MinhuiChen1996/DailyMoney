@@ -57,12 +57,13 @@ public class modify extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
 
-    private String speech, userid, strDate, sPrice, pName, curTime, type;
+    private String recordid, userid, strDate, curTime, type, cate, name, memo, account, date, time, amount;
 
     private RadioGroup radgroup;
     SharedPreferences sp;
+    private Intent intent;
 
-    private Spinner sp_option;
+    SimpleDateFormat sdf, format;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,33 +73,26 @@ public class modify extends AppCompatActivity {
         //set Status bar
         setStatus();
         initToolbar();
-
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            recordid = extras.getString("recordId");
+            Log.d("recordId", recordid);
+            //The key argument here must match that used in the other activity
+        } else {
+            intent = new Intent(modify.this, recordinfo.class);
+            startActivity(intent);
+            Toast.makeText(this, "Can't find this record", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
 
         db = new Database(this);
+        userid = getuserid();
+        setData(recordid, userid);
 
-        newDate = (TextView) findViewById(R.id.newDate);
-        newTime = (TextView) findViewById(R.id.newTime);
-        newName = (EditText) findViewById(R.id.newPname);
-        newMemo = (EditText) findViewById(R.id.newMemo);
-        newAccount = (EditText) findViewById(R.id.newAcount);
-        newAmount = (EditText) findViewById(R.id.newAmount);
-        radgroup = (RadioGroup) findViewById(R.id.radioGroup);
+        // get date
+        format = new SimpleDateFormat("yyyy-MM-dd");
 
-
-
-
-        // current date
-        Calendar c = Calendar.getInstance();
-        int cYear = c.get(Calendar.YEAR);
-        int cMonth = c.get(Calendar.MONTH);
-        int cDay = c.get(Calendar.DAY_OF_MONTH);
-        c.set(cYear, cMonth, cDay);
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        strDate = format.format(c.getTime());
-
-        newDate.setText(strDate);
         // perform click event on edit text for select date
         newDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,11 +121,8 @@ public class modify extends AppCompatActivity {
 
         });
 
-        // current time
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        curTime = sdf.format(date);
-        newTime.setText(curTime);
+        // get time
+        sdf = new SimpleDateFormat("HH:mm");
 
         newTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +135,7 @@ public class modify extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                curTime = format("%02d:%02d", hourOfDay, minute);
+                                curTime = String.format("%02d:%02d", hourOfDay, minute);
                                 newTime.setText(curTime);
                             }
                         }, Hour, Minute, true);
@@ -152,13 +143,71 @@ public class modify extends AppCompatActivity {
             }
         });
 
+        amountKeyboard();
 
+
+    }
+
+    private void setData(String rid, String uid) {
+        db.open();
+        Cursor c = db.getRecord(rid, uid);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            newDate = (TextView) findViewById(R.id.newDate);
+            newTime = (TextView) findViewById(R.id.newTime);
+            newName = (EditText) findViewById(R.id.newPname);
+            newMemo = (EditText) findViewById(R.id.newMemo);
+            newAccount = (EditText) findViewById(R.id.newAcount);
+            newAmount = (EditText) findViewById(R.id.newAmount);
+            radgroup = (RadioGroup) findViewById(R.id.radioGroup);
+
+            cate = c.getString(c.getColumnIndex("cate"));
+            name = c.getString(c.getColumnIndex("name"));
+            memo = c.getString(c.getColumnIndex("memo"));
+            account = c.getString(c.getColumnIndex("account"));
+            amount = c.getString(c.getColumnIndex("amount"));
+            date = c.getString(c.getColumnIndex("date"));
+            time = c.getString(c.getColumnIndex("time"));
+
+            newName.setText(name);
+            newMemo.setText(memo);
+            newAccount.setText(account);
+            newAmount.setText(amount);
+            newDate.setText(date);
+            newTime.setText(time);
+
+            String cateChecked = cate;
+            switch (cateChecked) {
+                case "food":
+                    radgroup.check(R.id.btnFood);
+                    break;
+                case "daily":
+                    radgroup.check(R.id.btnDaily);
+                    break;
+                case "clothes":
+                    radgroup.check(R.id.btnClothes);
+                    break;
+                case "traffic":
+                    radgroup.check(R.id.btnTraffic);
+                    break;
+            }
+//            c.moveToNext();
+        } else {
+            intent = new Intent(modify.this, MainActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "Can't find this record in DB", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        db.close();
+    }
+
+    private void amountKeyboard() {
         newAmount.setEnabled(false);
-        newAmount.addTextChangedListener(new TradeTextWatcher(newAmount, null));
+        newAmount.addTextChangedListener(new Record.TradeTextWatcher(newAmount, null));
         TextView[] mBtnkey_digits = new TextView[10];
 
         for (int i = 0; i < 10; i++) {
-            String strid = format("btn_price_%d", i);
+            String strid = String.format("btn_price_%d", i);
             mBtnkey_digits[i] = (TextView) findViewById(this
                     .getResources().getIdentifier(strid, "id",
                             this.getPackageName()));
@@ -197,8 +246,8 @@ public class modify extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-
                 Intent intent = new Intent(modify.this, recordinfo.class);
+                intent.putExtra("recordId", recordid);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -290,20 +339,20 @@ public class modify extends AppCompatActivity {
                     Toast.makeText(modify.this, "Please input amount of money.", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    userid = getuserid();
+
                     db.open();
-                    type = "Expense";
 
                     double Ramount = Double.parseDouble(amount);
-                    Ramount = -Ramount;
-
-                    long qid = db.insertRecord(type, Rcate, name, Ramount, date, time, memo, account, userid);
+                    amount = String.format("%.2f", Ramount);
+                    long qid = db.updateRecord(recordid, Rcate, name, amount, date, time, memo, account);
                     if (qid != -1) {
-                        Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Successfully update Record!", Toast.LENGTH_LONG).show();
+                        intent = new Intent(modify.this, MainActivity.class);
+                        startActivity(intent);
                         finish();
-                        startActivity(getIntent());
+
                     } else {
-                        Toast.makeText(getApplicationContext(), "Sorry! record isn't add.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Sorry! record isn't update.", Toast.LENGTH_LONG).show();
                     }
                     db.close();
                 }

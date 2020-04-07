@@ -125,7 +125,7 @@ public class piechart extends AppCompatActivity {
         pieChart.setData(data);// set the data and list of labels into chart
         pieChart.setDescription("Monthly Category Report");  // set the description
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.animateXY(5000, 5000);
+        pieChart.animateXY(2500, 2500);
     }
 
     String formatMonthYear(String str) {

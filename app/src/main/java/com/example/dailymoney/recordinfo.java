@@ -63,14 +63,14 @@ public class recordinfo extends AppCompatActivity {
         btn_modify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(type.equals("Income"))
-                {
+                if (type.equals("Income")) {
                     intent = new Intent(recordinfo.this, modifyincome.class);
+                    intent.putExtra("recordId", recordid);
                     startActivity(intent);
                     finish();
-                }
-                else{
+                } else {
                     intent = new Intent(recordinfo.this, modify.class);
+                    intent.putExtra("recordId", recordid);
                     startActivity(intent);
                     finish();
                 }
@@ -115,12 +115,21 @@ public class recordinfo extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         db.open();
-                        db.deleteRocord(recordid);
-                        db.close();
-                        Toast.makeText(recordinfo.this, "Delete the record", Toast.LENGTH_SHORT).show();
-                        intent = new Intent(recordinfo.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        boolean result = db.deleteRocord(recordid);
+                        if (result) {
+                            Toast.makeText(recordinfo.this, "Delete the record", Toast.LENGTH_SHORT).show();
+                            db.close();
+                            intent = new Intent(recordinfo.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            db.close();
+                            Toast.makeText(recordinfo.this, "Sorry, delete error.", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(recordinfo.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        }
                     }
                 });
                 dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -132,7 +141,6 @@ public class recordinfo extends AppCompatActivity {
                 break;
 
             case android.R.id.home:
-
                 intent = new Intent(recordinfo.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -227,30 +235,4 @@ public class recordinfo extends AppCompatActivity {
         db.close();
     }
 
-/*    private AlertDialog AskOption() {
-        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
-                // set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete")
-                .setIcon(R.drawable.delete)
-
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        //your deleting code
-                        dialog.dismiss();
-                    }
-
-                })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                })
-                .create();
-
-        return myQuittingDialogBox;
-    }*/
 }
