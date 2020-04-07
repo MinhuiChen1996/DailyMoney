@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class income extends AppCompatActivity {
+public class modifyincome extends AppCompatActivity {
     private Toolbar toolbar;
 
     private EditText newName, newMemo, newAccount, newAmount;
@@ -57,34 +57,13 @@ public class income extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_income);
+        setContentView(R.layout.activity_modifyincome);
 
         //set Status bar
         setStatus();
         initToolbar();
+        setTitle("Record");
 
-        sp_option = (Spinner) findViewById(R.id.sp_option);
-        List<String> optionsList = new LinkedList<>(Arrays.asList("Income", "Expense"));
-        ArrayAdapter arr_adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, optionsList);
-        //设置样式
-        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //加载适配器
-        sp_option.setAdapter(arr_adapter);
-        sp_option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1) {
-                    Intent intent = new Intent(income.this, Record.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 
         db = new Database(this);
@@ -117,7 +96,7 @@ public class income extends AppCompatActivity {
                 int mMonth = c.get(Calendar.MONTH); // current month
                 int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
                 // date picker dialog
-                datePickerDialog = new DatePickerDialog(income.this,
+                datePickerDialog = new DatePickerDialog(modifyincome.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -148,7 +127,7 @@ public class income extends AppCompatActivity {
                 int Hour = c.get(Calendar.HOUR_OF_DAY);
                 int Minute = c.get(Calendar.MINUTE);
 
-                timePickerDialog = new TimePickerDialog(income.this,
+                timePickerDialog = new TimePickerDialog(modifyincome.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -216,7 +195,7 @@ public class income extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Intent intent = new Intent(income.this, MainActivity.class);
+                Intent intent = new Intent(modifyincome.this, recordinfo.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -331,10 +310,10 @@ public class income extends AppCompatActivity {
                     }
                 }
                 if (TextUtils.isEmpty(name)) {
-                    Toast.makeText(income.this, "Please input record name.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(modifyincome.this, "Please input record name.", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(amount)) {
-                    Toast.makeText(income.this, "Please input amount of money.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(modifyincome.this, "Please input amount of money.", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     userid = getuserid();

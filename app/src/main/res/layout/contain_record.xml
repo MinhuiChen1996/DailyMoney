@@ -40,28 +40,28 @@
                     android:layout_weight="1"
                     android:checked="true"
                     android:drawableTop="@drawable/food"
-                    android:text="Food"/>
+                    android:text="food"/>
                 <RadioButton
                     android:id="@+id/btnDaily"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableTop="@drawable/daily"
-                    android:text="Daily"/>
+                    android:text="daily"/>
                 <RadioButton
                     android:id="@+id/btnClothes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableTop="@drawable/clothes"
-                    android:text="Clothes"/>
+                    android:text="clothes"/>
                 <RadioButton
                     android:id="@+id/btnMedical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/medical"
-                    android:text="Medical"/>
+                    android:drawableTop="@drawable/traffic"
+                    android:text="traffic"/>
                 <!--                <RadioButton
                                     android:id="@+id/btnGift"
                                     android:layout_width="0dp"

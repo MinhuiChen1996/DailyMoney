@@ -41,7 +41,7 @@ public class piechart extends AppCompatActivity {
 
     private RelativeLayout date_picker_button;
 
-    private String strDe,monthYearStr,strDate;
+    private String strDe, monthYearStr, strDate;
 
     PieChart pieChart;
     SharedPreferences sp;
@@ -59,20 +59,20 @@ public class piechart extends AppCompatActivity {
 
         db = new Database(this);
         monthYear = (TextView) findViewById(R.id.date_picker_text_view);
-        date_picker_button = (RelativeLayout)findViewById(R.id.date_picker_button);
+        date_picker_button = (RelativeLayout) findViewById(R.id.date_picker_button);
         pieChart = (PieChart) findViewById(R.id.piechart);
         // current month & year
         Calendar c = Calendar.getInstance();
         int cYear = c.get(Calendar.YEAR);
         int cMonth = c.get(Calendar.MONTH);
-        c.set(cYear,cMonth,01);
+        c.set(cYear, cMonth, 01);
 
         strDate = sdf.format(c.getTime());
         monthYear.setText(strDate);
         strDe = mY.format(c.getTime());
 
         String userid = getuserid();
-        initpieChart(strDe,userid);
+        initpieChart(strDe, userid);
 
         date_picker_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,9 +82,9 @@ public class piechart extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
                         monthYearStr = year + "-" + (month + 1) + "-" + i2;
-                        c.set(year,month,i2);
+                        c.set(year, month, i2);
                         strDe = mY.format(c.getTime());
-                        initpieChart(strDe,userid);
+                        initpieChart(strDe, userid);
                         monthYear.setText(formatMonthYear(monthYearStr));
 
                     }
@@ -95,16 +95,16 @@ public class piechart extends AppCompatActivity {
 
     }
 
-    private void initpieChart(String str,String uid){
+    private void initpieChart(String str, String uid) {
 
         db.open();
-        String type = "expense";
-        Cursor c = db.pieChartPay(str,type, uid);
+        String type = "Expense";
+        Cursor c = db.pieChartPay(str, type, uid);
         ArrayList<String> cate = new ArrayList<>();
         ArrayList<Double> amount = new ArrayList<>();
 
         c.moveToFirst();
-        while(!c.isAfterLast()) {
+        while (!c.isAfterLast()) {
             cate.add(c.getString(c.getColumnIndex("cate")));
             amount.add(c.getDouble(c.getColumnIndex("cateTotal")));
             c.moveToNext();
@@ -118,9 +118,9 @@ public class piechart extends AppCompatActivity {
             yVals.add(new BarEntry(Float.valueOf(String.valueOf(amount.get(counter))), counter));
         }
 
-        PieDataSet dataSet = new PieDataSet (yVals, "");
+        PieDataSet dataSet = new PieDataSet(yVals, "");
 
-        PieData  data = new PieData (xVals, dataSet);
+        PieData data = new PieData(xVals, dataSet);
 
         pieChart.setData(data);// set the data and list of labels into chart
         pieChart.setDescription("Monthly Category Report");  // set the description
@@ -137,6 +137,7 @@ public class piechart extends AppCompatActivity {
         }
         return sdf.format(date);
     }
+
     @Override
     public void setTitle(CharSequence title) {
         TextView tvTitle = findViewById(R.id.title);
@@ -154,6 +155,7 @@ public class piechart extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -169,13 +171,15 @@ public class piechart extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     // status bar
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
     }
-    private String getuserid(){
-        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        return sp.getString("userid","");
+
+    private String getuserid() {
+        sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid", "");
     }
 }

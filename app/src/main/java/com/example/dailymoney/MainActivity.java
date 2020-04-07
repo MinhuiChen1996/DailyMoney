@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.icu.text.DecimalFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton add;
     private FloatingActionButton voice;
 
-    private TextView monthYear,tv_logout,nav_username,tv_income, tv_expense, tv_balance;
+    private TextView monthYear, tv_logout, nav_username, tv_income, tv_expense, tv_balance;
 
     private Intent intent;
 
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     SimpleCursorAdapter myAdapter;
     private Database db;
-    String[] columns = new String[] {"name","date","memo","amount"};
-    int[] recordList = new int []{ R.id.name, R.id.date, R.id.memo, R.id.amount};
+    String[] columns = new String[]{"_id", "name", "date", "memo", "amount"};
+    int[] recordList = new int[]{R.id._id, R.id.name, R.id.date, R.id.memo, R.id.amount};
 
     public ArrayAdapter mList;
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private RelativeLayout date_picker_button;
 
-    private String strDe,monthYearStr,strDate,speech,username,userid;
+    private String strDe, monthYearStr, strDate, speech, username, userid;
     private View headerview;
     SharedPreferences sp;
     Calendar c;
@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     public static final int REQUEST_CODE_PERMISSIONS = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +114,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // setting for navagtion view
         initgNavagationView();
 
-        mListView= (ListView) findViewById(R.id.list);
+        mListView = (ListView) findViewById(R.id.list);
+/*        mListView.setEnabled(true);
+        //注册OnTouch监听器
+        mListView.setOnTouchListener(new myOnTouchListener());*/
+
+
         tv_income = (TextView) findViewById(R.id.tv_income);
         tv_expense = (TextView) findViewById(R.id.tv_expense);
         tv_balance = (TextView) findViewById(R.id.tv_balance);
@@ -121,10 +127,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setTitle("Daily Money");
         headerview = navigationView.getHeaderView(0);
-        tv_logout = (TextView)headerview.findViewById(R.id.nav_logout);
+        tv_logout = (TextView) headerview.findViewById(R.id.nav_logout);
 
         monthYear = (TextView) findViewById(R.id.date_picker_text_view);
-        date_picker_button = (RelativeLayout)findViewById(R.id.date_picker_button);
+        date_picker_button = (RelativeLayout) findViewById(R.id.date_picker_button);
 
         checkLogin();
 
@@ -136,27 +142,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-
         strDe = currentMonthYear();
         userid = getuserid();
-        initListRecord(strDe,userid);
-        setBalance(strDe,userid);
+        initListRecord(strDe, userid);
+        setBalance(strDe, userid);
 
         date_picker_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 strDe = initMonthYearPicker();
-                initListRecord(strDe,userid);
-                setBalance(strDe,userid);
+                initListRecord(strDe, userid);
+                setBalance(strDe, userid);
             }
         });
 
 
-
     }
-    private void logout(){
-        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        SharedPreferences.Editor editor=sp.edit();
+
+
+    private void logout() {
+        SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("isLogin", false);
         editor.putString("loginUserName", "");
         editor.putString("userid", "");
@@ -168,33 +174,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finish();
     }
 
-    private void setBalance(String date, String userid){
+    private void setBalance(String date, String userid) {
         db.open();
-        Cursor expenseC = db.sumMonth(date,"expense",userid);
+        Cursor expenseC = db.sumMonth(date, "expense", userid);
 
-        double expense,income,balance;
+        double expense, income, balance;
 
-        int i=expenseC.getCount();
-
-        if(expenseC.getCount()>0){
+        if (expenseC.getCount() > 0) {
             expenseC.moveToFirst();
-            expense=expenseC.getDouble(expenseC.getColumnIndex("Total"));
+            expense = expenseC.getDouble(expenseC.getColumnIndex("Total"));
             expenseC.moveToNext();
-        }else{
-            expense=0;
+        } else {
+            expense = 0;
         }
 
-        Cursor incomeC = db.sumMonth(date,"income",userid);
-        int y=incomeC.getCount();
-        if(incomeC.getCount()>0){
+        Cursor incomeC = db.sumMonth(date, "income", userid);
+
+        if (incomeC.getCount() > 0) {
             incomeC.moveToFirst();
-            income=incomeC.getDouble(expenseC.getColumnIndex("Total"));
+            income = incomeC.getDouble(expenseC.getColumnIndex("Total"));
             incomeC.moveToNext();
-        } else{
-            income=0;
+        } else {
+            income = 0;
         }
 
-        balance = income-expense;
+        balance = income - expense;
 
 
         tv_income.setText(String.format("%.2f", income));
@@ -206,12 +210,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private String currentMonthYear(){
+    private String currentMonthYear() {
         // current month & year
         c = Calendar.getInstance();
         int cYear = c.get(Calendar.YEAR);
         int cMonth = c.get(Calendar.MONTH);
-        c.set(cYear,cMonth,01);
+        c.set(cYear, cMonth, 01);
 
         strDate = sdf.format(c.getTime());
         monthYear.setText(strDate);
@@ -219,13 +223,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return strDe;
     }
 
-    private String initMonthYearPicker(){
+    private String initMonthYearPicker() {
         MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
         pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
                 monthYearStr = year + "-" + (month + 1) + "-" + i2;
-                c.set(year,month,i2);
+                c.set(year, month, i2);
                 strDe = mY.format(c.getTime());
                 monthYear.setText(formatMonthYear(monthYearStr));
             }
@@ -234,12 +238,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return strDe;
     }
 
-    private String exportMonthYear(){
+    private String exportMonthYear() {
         MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
         pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
-                c.set(year,month,i2);
+                c.set(year, month, i2);
                 strDe = mY.format(c.getTime());
             }
         });
@@ -247,12 +251,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return strDe;
     }
 
-    private void initListRecord(String str,String uid){
+    private void initListRecord(String str, String uid) {
 
         db.open();
-        Cursor c = db.monthRecord(str,uid);
-        myAdapter = new SimpleCursorAdapter(this, R.layout.row_record, c, columns,recordList);
+        Cursor c = db.monthRecord(str, uid);
+        myAdapter = new SimpleCursorAdapter(this, R.layout.row_record, c, columns, recordList);
         mListView.setAdapter(myAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String recordId = ((TextView) view.findViewById(R.id._id)).getText().toString();
+                Log.d("detail", recordId);
+                Intent intent = new Intent(MainActivity.this, recordinfo.class);
+                intent.putExtra("recordId", recordId);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
         db.close();
         // bind image with records
   /*      myAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -267,6 +286,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });*/
     }
+
+
     String formatMonthYear(String str) {
         Date date = null;
         try {
@@ -276,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return sdf.format(date);
     }
+
     @Override
     public void setTitle(CharSequence title) {
         TextView tvTitle = findViewById(R.id.title);
@@ -294,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 "Speech recognition demo");
         startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -305,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ArrayList matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             mList = new ArrayAdapter(this, android.R.layout.simple_list_item_1, matches);
 
-            AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Please select what you said").setAdapter(mList,new DialogInterface.OnClickListener(){
+            AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Please select what you said").setAdapter(mList, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     speech = mList.getItem(which).toString();
@@ -326,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
     // close drawer
     private void initDrawerLayout() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -333,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
+
     // Toolbar setting
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -350,11 +375,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.details:
-                break;
-            case R.id.search:
-                intent = new Intent(MainActivity.this, search.class);
-                startActivity(intent);
-                finish();
                 break;
             case R.id.bar_chart:
                 intent = new Intent(MainActivity.this, barchart.class);
@@ -387,6 +407,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    // add menu in toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_btn, menu);
+        return true;
+    }
+
+    // menu click event
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                intent = new Intent(MainActivity.this, search.class);
+                startActivity(intent);
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     //返回键的处理
     @Override
     public void onBackPressed() {
@@ -409,6 +451,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
     private void initVoiceButton() {
         voice = (FloatingActionButton) findViewById(R.id.voice);
         voice.setOnClickListener(new View.OnClickListener() {
@@ -419,48 +462,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    private void checkLogin() {
 
- /*  // add menu in toolbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        return true;
-    }
-
-    // menu click event
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-                Intent intent = new Intent(MainActivity.this, search.class);
-                startActivity(intent);
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
-    private void checkLogin(){
-
-        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        if (getloginstatus()){
-            username = sp.getString("loginUserName","");
-            nav_username = (TextView)headerview.findViewById(R.id.nav_username);
-            nav_username.setText("Hi "+username);
-        }
-        else{
+        sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        if (getloginstatus()) {
+            username = sp.getString("loginUserName", "");
+            nav_username = (TextView) headerview.findViewById(R.id.nav_username);
+            nav_username.setText("Hi " + username);
+        } else {
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
             finish();
         }
     }
-    public boolean getloginstatus(){
+
+    public boolean getloginstatus() {
         return sp.getBoolean("isLogin", false);
     }
 
-    private String getuserid(){
-        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        return sp.getString("userid","");
+    private String getuserid() {
+        sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid", "");
     }
 
 
@@ -480,7 +502,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void createCSV(String str){
+    public void createCSV(String str) {
         verifyStoragePermissions(this);
         boolean success = true;
         File folder = new File(Environment.getExternalStorageDirectory() + File.separator + this.getResources().getString(R.string.app_name));
@@ -497,8 +519,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             builder.setPositiveButton("Save", (dialog, which) -> {
                 String m_Text = input.getText().toString();
                 String out = filename + m_Text + ".csv";
-
-
+                writeToCSVfile(strDe, userid, out);
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             builder.show();
@@ -507,13 +528,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-/*        return filename;*/
+        /*        return filename;*/
     }
 
-    private void writeToCSVfile(String str, String userid, String filename){
+    private void writeToCSVfile(String str, String userid, String filename) {
 
         db.open();
-        Cursor c = db.monthRecord(str,userid);
+        Cursor c = db.monthRecord(str, userid);
 
         FileWriter fw = null;
         try {
@@ -521,23 +542,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             int colcount = 0;
 
             fw = new FileWriter(filename);
-            BufferedWriter bw  = new BufferedWriter(fw);
+            BufferedWriter bw = new BufferedWriter(fw);
             rowcount = c.getCount();
             colcount = c.getColumnCount();
 
-            if (rowcount > 0 )
+            if (rowcount > 0)
                 c.moveToFirst();
-            for (int i = 0 ; i < colcount; i++)
-            {
-                if (i != colcount -1){
+            for (int i = 0; i < colcount; i++) {
+                if (i != colcount - 1) {
                     bw.write(c.getColumnName(i) + ",");
-                }
-                else {
+                } else {
                     bw.write(c.getColumnName(i));
                 }
             }
             bw.write("\r\n");
-            for (int i = 0; i < rowcount;i++) {
+            for (int i = 0; i < rowcount; i++) {
                 c.moveToPosition(i);
                 for (int j = 0; j < colcount; j++) {
                     if (j != colcount - 1) {
@@ -565,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         StrictMode.setVmPolicy(builder.build());
 
         intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
-        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+file.getAbsolutePath()));
+        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
 
         //if you need
         //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);

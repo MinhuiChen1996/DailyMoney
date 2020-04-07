@@ -41,7 +41,4 @@ dependencies {
     implementation "androidx.drawerlayout:drawerlayout:1.0.0"
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.github.arcadefire:nice-spinner:1.4.4'
-
-
 }

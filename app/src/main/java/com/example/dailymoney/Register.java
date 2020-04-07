@@ -26,10 +26,11 @@ import java.util.Calendar;
 
 public class Register extends AppCompatActivity {
     private EditText email, password, username, password2;
-    private String newUsername,newEmail,newPassowrd,newPassowrd2;
+    private String newUsername, newEmail, newPassowrd, newPassowrd2;
     DatePickerDialog datePickerDialog;
     private Database db;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,7 @@ public class Register extends AppCompatActivity {
         initRegsiter();
 
     }
+
     // status bar
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -54,6 +56,7 @@ public class Register extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -70,7 +73,7 @@ public class Register extends AppCompatActivity {
         }
     }
 
-    private void initRegsiter(){
+    private void initRegsiter() {
 
         db = new Database(this);
 
@@ -79,9 +82,9 @@ public class Register extends AppCompatActivity {
         password2 = (EditText) findViewById(R.id.et_pw_again);
         email = (EditText) findViewById(R.id.et_email);
 
-        Button FinButton = (Button)findViewById(R.id.btn_register);
+        Button reg = (Button) findViewById(R.id.btn_register);
 
-        FinButton.setOnClickListener(new View.OnClickListener() {
+        reg.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getEditString();
                 if (TextUtils.isEmpty(newUsername)) {
@@ -96,52 +99,50 @@ public class Register extends AppCompatActivity {
                 } else if (!newPassowrd.equals(newPassowrd2)) {
                     Toast.makeText(Register.this, "Password is different!", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(isExistUserName(newUsername)){
+                } else if (isExistUserName(newUsername)) {
                     Toast.makeText(Register.this, "This user is exist.", Toast.LENGTH_SHORT).show();
                     return;
-                }else{
-                    saveRegisterInfo(newUsername, newPassowrd,newEmail);
+                } else {
+                    saveRegisterInfo(newUsername, newPassowrd, newEmail);
                     Register.this.finish();
                 }
             }
         });
     }
 
-    public void getEditString(){
-         newUsername = username.getText().toString().trim();
-         newEmail = email.getText().toString();
-         newPassowrd = password.getText().toString();
-         newPassowrd2 = password2.getText().toString();
+    public void getEditString() {
+        newUsername = username.getText().toString().trim();
+        newEmail = email.getText().toString();
+        newPassowrd = password.getText().toString();
+        newPassowrd2 = password2.getText().toString();
     }
-    private boolean isExistUserName(String userName){
 
-        boolean has_userName=false;
+    private boolean isExistUserName(String userName) {
+
+        boolean has_userName = false;
         String md5Username = MD5Utils.md5(userName); // encryption username by MD5
         db.open();
         Cursor c = db.checkUser(md5Username);
-        if(c.getCount() != 0){
-            has_userName=true;
+        if (c.getCount() != 0) {
+            has_userName = true;
         }
         db.close();
         return has_userName;
     }
 
 
-    private void saveRegisterInfo(String userName,String pw, String email){
+    private void saveRegisterInfo(String userName, String pw, String email) {
         db.open();
         String md5Username = MD5Utils.md5(userName); // encryption username by MD5
         String md5Pw = MD5Utils.md5(pw);// encryption password by MD5
-        long id = db.insertUser(md5Username,md5Pw, email);
-        if(id != -1)
-        {
-            Toast.makeText(getApplicationContext(),"Registration success!", Toast.LENGTH_LONG).show();
+        long id = db.insertUser(md5Username, md5Pw, email);
+        if (id != -1) {
+            Toast.makeText(getApplicationContext(), "Registration success!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Register.this, Login.class);
             startActivity(intent);
             finish();
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(),"Sorry! register is failed.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Sorry! register is failed.", Toast.LENGTH_LONG).show();
         }
         db.close();
 

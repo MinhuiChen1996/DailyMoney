@@ -3,23 +3,29 @@ package com.example.dailymoney;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -36,8 +42,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
-public class income extends AppCompatActivity {
+import static java.lang.String.format;
+
+public class modify extends AppCompatActivity {
+
     private Toolbar toolbar;
 
     private EditText newName, newMemo, newAccount, newAmount;
@@ -46,6 +56,7 @@ public class income extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
+
     private String speech, userid, strDate, sPrice, pName, curTime, type;
 
     private RadioGroup radgroup;
@@ -53,38 +64,15 @@ public class income extends AppCompatActivity {
 
     private Spinner sp_option;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_income);
+        setContentView(R.layout.activity_modify);
 
         //set Status bar
         setStatus();
         initToolbar();
 
-        sp_option = (Spinner) findViewById(R.id.sp_option);
-        List<String> optionsList = new LinkedList<>(Arrays.asList("Income", "Expense"));
-        ArrayAdapter arr_adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, optionsList);
-        //设置样式
-        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //加载适配器
-        sp_option.setAdapter(arr_adapter);
-        sp_option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1) {
-                    Intent intent = new Intent(income.this, Record.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 
         db = new Database(this);
@@ -96,6 +84,10 @@ public class income extends AppCompatActivity {
         newAccount = (EditText) findViewById(R.id.newAcount);
         newAmount = (EditText) findViewById(R.id.newAmount);
         radgroup = (RadioGroup) findViewById(R.id.radioGroup);
+
+
+
+
         // current date
         Calendar c = Calendar.getInstance();
         int cYear = c.get(Calendar.YEAR);
@@ -117,7 +109,7 @@ public class income extends AppCompatActivity {
                 int mMonth = c.get(Calendar.MONTH); // current month
                 int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
                 // date picker dialog
-                datePickerDialog = new DatePickerDialog(income.this,
+                datePickerDialog = new DatePickerDialog(modify.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -148,11 +140,11 @@ public class income extends AppCompatActivity {
                 int Hour = c.get(Calendar.HOUR_OF_DAY);
                 int Minute = c.get(Calendar.MINUTE);
 
-                timePickerDialog = new TimePickerDialog(income.this,
+                timePickerDialog = new TimePickerDialog(modify.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                curTime = String.format("%02d:%02d", hourOfDay, minute);
+                                curTime = format("%02d:%02d", hourOfDay, minute);
                                 newTime.setText(curTime);
                             }
                         }, Hour, Minute, true);
@@ -162,11 +154,11 @@ public class income extends AppCompatActivity {
 
 
         newAmount.setEnabled(false);
-        newAmount.addTextChangedListener(new Record.TradeTextWatcher(newAmount, null));
+        newAmount.addTextChangedListener(new TradeTextWatcher(newAmount, null));
         TextView[] mBtnkey_digits = new TextView[10];
 
         for (int i = 0; i < 10; i++) {
-            String strid = String.format("btn_price_%d", i);
+            String strid = format("btn_price_%d", i);
             mBtnkey_digits[i] = (TextView) findViewById(this
                     .getResources().getIdentifier(strid, "id",
                             this.getPackageName()));
@@ -180,25 +172,6 @@ public class income extends AppCompatActivity {
         mBtnKey_point.setOnClickListener(mClickListener);
         mBtnKey_del.setOnClickListener(mClickListener);
         mBtnKey_sk.setOnClickListener(mClickListener);
-    }
-
-    // status bar
-    private void setStatus() {
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
-    }
-
-    private String getuserid() {
-        sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
-        return sp.getString("userid", "");
-    }
-
-    // Toolbar setting
-    private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
@@ -211,12 +184,21 @@ public class income extends AppCompatActivity {
         }
     }
 
+    // Toolbar setting
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Intent intent = new Intent(income.this, MainActivity.class);
+                Intent intent = new Intent(modify.this, recordinfo.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -225,38 +207,6 @@ public class income extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public static class TradeTextWatcher implements TextWatcher {
-
-        private EditText mEditText;
-//      private TextView mTextView;
-
-        public TradeTextWatcher(EditText edit, TextView text) {
-            mEditText = edit;
-//          mTextView = text;
-        }
-
-        @Override
-        public void afterTextChanged(Editable arg0) {
-
-            int len = mEditText.getText().length();
-
-            mEditText.setSelection(len);
-
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                      int arg3) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
-
-        }
-
     }
 
     private View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -314,7 +264,8 @@ public class income extends AppCompatActivity {
                 }
                 newAmount.setTextSize(30);
                 newAmount.setTextColor(Color.WHITE);
-            } else if (id == R.id.btn_ok) {//save
+            } else if (id == R.id.btn_ok) {
+                //save
 
                 String date = newDate.getText().toString();
                 String time = newTime.getText().toString();
@@ -323,6 +274,7 @@ public class income extends AppCompatActivity {
                 String account = newAccount.getText().toString();
                 String amount = newAmount.getText().toString();
 
+
                 String Rcate = null;
                 for (int i = 0; i < radgroup.getChildCount(); i++) {
                     RadioButton rd = (RadioButton) radgroup.getChildAt(i);
@@ -330,18 +282,21 @@ public class income extends AppCompatActivity {
                         Rcate = rd.getText().toString();
                     }
                 }
+
                 if (TextUtils.isEmpty(name)) {
-                    Toast.makeText(income.this, "Please input record name.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(modify.this, "Please input record name.", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(amount)) {
-                    Toast.makeText(income.this, "Please input amount of money.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(modify.this, "Please input amount of money.", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     userid = getuserid();
                     db.open();
-                    type = "Income";
+                    type = "Expense";
 
                     double Ramount = Double.parseDouble(amount);
+                    Ramount = -Ramount;
+
                     long qid = db.insertRecord(type, Rcate, name, Ramount, date, time, memo, account, userid);
                     if (qid != -1) {
                         Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
@@ -366,4 +321,49 @@ public class income extends AppCompatActivity {
             }
         }
     };
+
+    public static class TradeTextWatcher implements TextWatcher {
+
+        private EditText mEditText;
+//      private TextView mTextView;
+
+        public TradeTextWatcher(EditText edit, TextView text) {
+            mEditText = edit;
+//          mTextView = text;
+        }
+
+        @Override
+        public void afterTextChanged(Editable arg0) {
+
+            int len = mEditText.getText().length();
+
+            mEditText.setSelection(len);
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                      int arg3) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
+
+        }
+
+    }
+
+    // status bar
+    private void setStatus() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
+    }
+
+    private String getuserid() {
+        sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid", "");
+    }
+
+
 }

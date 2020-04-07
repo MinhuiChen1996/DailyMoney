@@ -7,11 +7,6 @@
         android:icon="@drawable/details"
         android:title="Details" />
     <item
-        android:id="@+id/search"
-        android:checked="true"
-        android:icon="@drawable/search"
-        android:title="Search" />
-    <item
         android:id="@+id/bar_chart"
         android:checked="true"
         android:icon="@drawable/barchart"

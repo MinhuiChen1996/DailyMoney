@@ -20,14 +20,14 @@ public class MD5Utils {
             StringBuffer sb = new StringBuffer();
             // result array，digest.digest ( ); -> text.getBytes();
             // for loop array byte[] result;
-            for (byte b : result){
+            for (byte b : result) {
                 // 0xff hexadecimal
                 int number = b & 0xff;
                 // number value overt String Integer.toHexString( );
                 String hex = Integer.toHexString(number);
-                if (hex.length() == 1){
-                    sb.append("0"+hex);
-                }else {
+                if (hex.length() == 1) {
+                    sb.append("0" + hex);
+                } else {
                     sb.append(hex);
                 }
             }

@@ -39,13 +39,14 @@ public class search extends AppCompatActivity {
 
     SimpleCursorAdapter myAdapter;
     private Database db;
-    String[] columns = new String[] {"name","date","memo","amount"};
-    int[] recordList = new int []{ R.id.name, R.id.date, R.id.memo, R.id.amount};
+    String[] columns = new String[]{"name", "date", "memo", "amount"};
+    int[] recordList = new int[]{R.id.name, R.id.date, R.id.memo, R.id.amount};
     private ListView mListView;
     public ArrayAdapter mList;
 
     private SearchView mSearchView;
     SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,22 +60,21 @@ public class search extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.list);
         db = new Database(this);
 
-        searchText = (EditText)findViewById(R.id.searchText);
-        ImageButton btnSearch = (ImageButton)findViewById(R.id.btnSearch);
+        searchText = (EditText) findViewById(R.id.searchText);
+        ImageButton btnSearch = (ImageButton) findViewById(R.id.btnSearch);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String query = searchText.getText().toString();
                 String userid = getuserid();
-                if(query.isEmpty() ){
-                    Toast.makeText(getApplicationContext(),"no text", Toast.LENGTH_LONG).show();
-                }
-                else{
+                if (query.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "no text", Toast.LENGTH_LONG).show();
+                } else {
                     db.open();
-                    Cursor c = db.seearchRecord(query,userid);
+                    Cursor c = db.seearchRecord(query, userid);
 
-                    myAdapter = new SimpleCursorAdapter(search.this, R.layout.row_record, c, columns,recordList);
+                    myAdapter = new SimpleCursorAdapter(search.this, R.layout.row_record, c, columns, recordList);
                     mListView.setAdapter(myAdapter);
                     db.close();
                 }
@@ -89,6 +89,7 @@ public class search extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -104,6 +105,7 @@ public class search extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     // status bar
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -121,9 +123,9 @@ public class search extends AppCompatActivity {
         }
     }
 
-    private String getuserid(){
-        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        return sp.getString("userid","");
+    private String getuserid() {
+        sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid", "");
     }
 
 }

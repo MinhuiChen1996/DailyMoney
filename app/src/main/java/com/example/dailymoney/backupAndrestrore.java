@@ -31,7 +31,7 @@ import java.security.Permissions;
 
 public class backupAndrestrore extends AppCompatActivity {
     private Toolbar toolbar;
-    private LinearLayout lc_backup,lc_restore;
+    private LinearLayout lc_backup, lc_restore;
     public static final int REQUEST_CODE_PERMISSIONS = 2;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -39,6 +39,7 @@ public class backupAndrestrore extends AppCompatActivity {
     };
 
     private Database db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +52,8 @@ public class backupAndrestrore extends AppCompatActivity {
         db = new Database(this);
 
 
-        lc_backup = (LinearLayout)findViewById(R.id.lt_backup);
-        lc_restore = (LinearLayout)findViewById(R.id.lt_restore);
+        lc_backup = (LinearLayout) findViewById(R.id.lt_backup);
+        lc_restore = (LinearLayout) findViewById(R.id.lt_restore);
 
         lc_backup.setOnClickListener(new View.OnClickListener() {
 
@@ -73,6 +74,7 @@ public class backupAndrestrore extends AppCompatActivity {
 
 
     }
+
     // Toolbar setting
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -80,6 +82,7 @@ public class backupAndrestrore extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -94,12 +97,14 @@ public class backupAndrestrore extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     // status bar
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
 
     }
+
     //check permissions.
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have read or write permission
@@ -133,7 +138,7 @@ public class backupAndrestrore extends AppCompatActivity {
             builder.setPositiveButton("Save", (dialog, which) -> {
                 String m_Text = input.getText().toString();
                 String out = outFileName + m_Text + ".db";
-                Log.d("DBoutFileName",out);
+                Log.d("DBoutFileName", out);
                 db.backup(out);
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());

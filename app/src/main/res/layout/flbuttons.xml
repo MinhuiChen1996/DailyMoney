@@ -17,6 +17,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
+
         android:src="@android:drawable/ic_input_add"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,6 +26,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+
         android:src="@android:drawable/ic_btn_speak_now"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

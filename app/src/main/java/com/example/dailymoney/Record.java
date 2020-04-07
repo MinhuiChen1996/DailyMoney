@@ -11,8 +11,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,8 +35,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.angmarch.views.NiceSpinner;
-import org.angmarch.views.OnSpinnerItemSelectedListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -43,6 +43,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import static java.lang.String.format;
 
 public class Record extends AppCompatActivity {
 
@@ -55,7 +57,7 @@ public class Record extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
 
-    private String speech, userid,strDate,sPrice,pName,curTime,type;
+    private String speech, userid, strDate, sPrice, pName, curTime, type;
 
     private RadioGroup radgroup;
     SharedPreferences sp;
@@ -73,8 +75,8 @@ public class Record extends AppCompatActivity {
         setTitle("Record");
 
         sp_option = (Spinner) findViewById(R.id.sp_option);
-        List<String> optionsList = new LinkedList<>(Arrays.asList("Expense","Income"));
-        ArrayAdapter arr_adapter= new ArrayAdapter<String>(this, R.layout.spinner_item, optionsList);
+        List<String> optionsList = new LinkedList<>(Arrays.asList("Expense", "Income"));
+        ArrayAdapter arr_adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, optionsList);
         //设置样式
         arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //加载适配器
@@ -82,7 +84,7 @@ public class Record extends AppCompatActivity {
         sp_option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position==1){
+                if (position == 1) {
                     Intent intent = new Intent(Record.this, income.class);
                     startActivity(intent);
                     finish();
@@ -96,7 +98,6 @@ public class Record extends AppCompatActivity {
         });
 
 
-
         db = new Database(this);
 
         newDate = (TextView) findViewById(R.id.newDate);
@@ -106,8 +107,6 @@ public class Record extends AppCompatActivity {
         newAccount = (EditText) findViewById(R.id.newAcount);
         newAmount = (EditText) findViewById(R.id.newAmount);
         radgroup = (RadioGroup) findViewById(R.id.radioGroup);
-
-
 
 
         Bundle extras = getIntent().getExtras();
@@ -120,7 +119,7 @@ public class Record extends AppCompatActivity {
         sPrice = extractPrice(speech);
         newAmount.setText(sPrice);
 
-        pName =  extracProduct(speech);
+        pName = extracProduct(speech);
         newName.setText(pName);
 
         // current date
@@ -128,7 +127,7 @@ public class Record extends AppCompatActivity {
         int cYear = c.get(Calendar.YEAR);
         int cMonth = c.get(Calendar.MONTH);
         int cDay = c.get(Calendar.DAY_OF_MONTH);
-        c.set(cYear,cMonth,cDay);
+        c.set(cYear, cMonth, cDay);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         strDate = format.format(c.getTime());
@@ -149,7 +148,7 @@ public class Record extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                c.set(year,monthOfYear,dayOfMonth);
+                                c.set(year, monthOfYear, dayOfMonth);
                                 strDate = format.format(c.getTime());
                                 newDate.setText(strDate);
 //                                newDate.setText( year+ "-" + (monthOfYear + 1) + "-" + dayOfMonth);
@@ -162,10 +161,10 @@ public class Record extends AppCompatActivity {
 
         });
 
-       // current time
+        // current time
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        curTime=sdf.format(date);
+        curTime = sdf.format(date);
         newTime.setText(curTime);
 
         newTime.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +178,7 @@ public class Record extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                curTime = String.format("%02d:%02d", hourOfDay, minute);
+                                curTime = format("%02d:%02d", hourOfDay, minute);
                                 newTime.setText(curTime);
                             }
                         }, Hour, Minute, true);
@@ -193,16 +192,16 @@ public class Record extends AppCompatActivity {
         TextView[] mBtnkey_digits = new TextView[10];
 
         for (int i = 0; i < 10; i++) {
-            String strid = String.format("btn_price_%d", i);
-            mBtnkey_digits[i] = (TextView)findViewById(this
+            String strid = format("btn_price_%d", i);
+            mBtnkey_digits[i] = (TextView) findViewById(this
                     .getResources().getIdentifier(strid, "id",
                             this.getPackageName()));
             mBtnkey_digits[i].setOnClickListener(mClickListener);
         }
 
-        TextView mBtnKey_sk = (TextView)findViewById(R.id.btn_ok);
-        TextView mBtnKey_point = (TextView)findViewById(R.id.btn_price_point);
-        LinearLayout mBtnKey_del = (LinearLayout)findViewById(R.id.btn_price_del);
+        TextView mBtnKey_sk = (TextView) findViewById(R.id.btn_ok);
+        TextView mBtnKey_point = (TextView) findViewById(R.id.btn_price_point);
+        LinearLayout mBtnKey_del = (LinearLayout) findViewById(R.id.btn_price_del);
 
         mBtnKey_point.setOnClickListener(mClickListener);
         mBtnKey_del.setOnClickListener(mClickListener);
@@ -227,6 +226,7 @@ public class Record extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -259,48 +259,48 @@ public class Record extends AppCompatActivity {
                     || id == R.id.btn_price_9
                     || id == R.id.btn_price_0) {
                 String input = ((TextView) view).getText().toString();
-                if (input == null){
+                if (input == null) {
                     newAmount.setText(input);
-                }else if (input != null ) {
+                } else if (input != null) {
                     String strTmp = newAmount.getText().toString();
 
-                    if(strTmp.contains(".")){
-                        if (strTmp.length() - 1 - strTmp.toString().indexOf(".") == 2){
+                    if (strTmp.contains(".")) {
+                        if (strTmp.length() - 1 - strTmp.toString().indexOf(".") == 2) {
                             newAmount.setText(strTmp);
-                        }
-                        else{
+                        } else {
                             strTmp += input;
                             newAmount.setText(strTmp);
                         }
-                    }else{
+                    } else {
                         strTmp += input;
                         newAmount.setText(strTmp);
                     }
                 }
                 newAmount.setTextSize(30);
                 newAmount.setTextColor(Color.WHITE);
-            }else if (id == R.id.btn_price_point)//point
+            } else if (id == R.id.btn_price_point)//point
             {
                 String inputa = ((TextView) view).getText().toString();
-                if (inputa == null){
+                if (inputa == null) {
                     newAmount.setText(inputa);
                 } else if (inputa != null) {
                     String strTmp = newAmount.getText().toString();
-                    if(strTmp.contains(".")){
+                    if (strTmp.contains(".")) {
                         newAmount.setText(strTmp);
-                    }else {
+                    } else {
                         strTmp += inputa;
-                        if(strTmp.startsWith(".") && strTmp.trim().length()==1){
-                            strTmp="0"+strTmp;
+                        if (strTmp.startsWith(".") && strTmp.trim().length() == 1) {
+                            strTmp = "0" + strTmp;
                             newAmount.setText(strTmp);
-                        }else{
+                        } else {
                             newAmount.setText(strTmp);
                         }
                     }
                 }
                 newAmount.setTextSize(30);
                 newAmount.setTextColor(Color.WHITE);
-            } else if (id == R.id.btn_ok) {//save
+            } else if (id == R.id.btn_ok) {
+                //save
 
                 String date = newDate.getText().toString();
                 String time = newTime.getText().toString();
@@ -309,37 +309,46 @@ public class Record extends AppCompatActivity {
                 String account = newAccount.getText().toString();
                 String amount = newAmount.getText().toString();
 
-                double Pamount = Double.parseDouble(amount);
-                String Pcate = null;
-                for(int i = 0; i < radgroup.getChildCount(); i++){
+
+                String Rcate = null;
+                for (int i = 0; i < radgroup.getChildCount(); i++) {
                     RadioButton rd = (RadioButton) radgroup.getChildAt(i);
-                    if(rd.isChecked())
-                    {
-                        Pcate = rd.getText().toString();
+                    if (rd.isChecked()) {
+                        Rcate = rd.getText().toString();
                     }
                 }
-                userid = getuserid();
-                db.open();
-                type="expense";
-                long qid = db.insertRecord(type,Pcate, name, Pamount,date, time, memo, account,userid);
-                if(qid != -1)
-                {
-                    Toast.makeText(getApplicationContext(),"Successfully Save Record!", Toast.LENGTH_LONG).show();
-                    finish();
-                    startActivity(getIntent());
+
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(Record.this, "Please input record name.", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (TextUtils.isEmpty(amount)) {
+                    Toast.makeText(Record.this, "Please input amount of money.", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    userid = getuserid();
+                    db.open();
+                    type = "Expense";
+
+                    double Ramount = Double.parseDouble(amount);
+                    Ramount = -Ramount;
+
+                    long qid = db.insertRecord(type, Rcate, name, Ramount, date, time, memo, account, userid);
+                    if (qid != -1) {
+                        Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
+                        finish();
+                        startActivity(getIntent());
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Sorry! record isn't add.", Toast.LENGTH_LONG).show();
+                    }
+                    db.close();
                 }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Sorry! record isn't add.", Toast.LENGTH_LONG).show();
-                }
-                db.close();
 
             } else if (id == R.id.btn_price_del) {// clear one digital
                 if (newAmount.getText().length() > 0) {
                     String strTmp = newAmount.getText().toString();
                     strTmp = strTmp.substring(0, strTmp.length() - 1);
                     newAmount.setText(strTmp);
-                }else {
+                } else {
                     newAmount.setText("");
                 }
                 newAmount.setTextSize(30);
@@ -347,6 +356,7 @@ public class Record extends AppCompatActivity {
             }
         }
     };
+
     public static class TradeTextWatcher implements TextWatcher {
 
         private EditText mEditText;
@@ -380,44 +390,45 @@ public class Record extends AppCompatActivity {
     }
 
 
-    public static String extractPrice(final String str){
-        if(str == null || str.isEmpty()) return "";
+    public static String extractPrice(final String str) {
+        if (str == null || str.isEmpty()) return "";
         StringBuilder sb = new StringBuilder();
-        boolean found =  false;
-        for(char c :  str.toCharArray()){
-            if(Character.isDigit(c)|| c == '.'){
+        boolean found = false;
+        for (char c : str.toCharArray()) {
+            if (Character.isDigit(c) || c == '.') {
                 sb.append(c);
-                found=true;
-            }
-            else if(found || c == '$' || c == '€'){
+                found = true;
+            } else if (found || c == '$' || c == '€') {
                 break;
             }
         }
         return sb.toString();
     }
 
-    public static String extracProduct(final String str){
-        if(str == null || str.isEmpty()) return "";
+    public static String extracProduct(final String str) {
+        if (str == null || str.isEmpty()) return "";
 
         StringBuilder sb = new StringBuilder();
-        for(char c :  str.toCharArray()){
-            if( Character.isDigit(c) || c == '$' || c == '€'){
+        for (char c : str.toCharArray()) {
+            if (Character.isDigit(c) || c == '$' || c == '€') {
                 break;
-            }
-            else{
+            } else {
                 sb.append(c);
             }
         }
         return sb.toString();
     }
+
     // status bar
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
     }
-    private String getuserid(){
-        sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        return sp.getString("userid","");
+
+    private String getuserid() {
+        sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        return sp.getString("userid", "");
     }
+
 
 }

@@ -15,7 +15,8 @@ import android.widget.TextView;
 public class about extends AppCompatActivity {
     private Toolbar toolbar;
 
-    private TextView  privayPollicy;
+    private TextView privayPollicy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,7 @@ public class about extends AppCompatActivity {
         setStatus();
         //set Toolbar
         initToolbar();
-        privayPollicy = (TextView)findViewById(R.id.tv_privacyPolicy);
+        privayPollicy = (TextView) findViewById(R.id.tv_privacyPolicy);
 
         privayPollicy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +39,7 @@ public class about extends AppCompatActivity {
         });
 
     }
+
     // Toolbar setting
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -45,6 +47,7 @@ public class about extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -60,6 +63,7 @@ public class about extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     // status bar
     private void setStatus() {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
     android:fitsSystemWindows="true"
-    tools:context=".Record">
+    tools:context=".income">
 
 
     <RelativeLayout
@@ -37,29 +37,29 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
-                    android:drawableTop="@drawable/food"
-                    android:text="Food"/>
+                    android:drawableTop="@drawable/salary"
+                    android:text="salary"/>
                 <RadioButton
                     android:id="@+id/btnDaily"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/daily"
-                    android:text="Daily"/>
+                    android:drawableTop="@drawable/sale"
+                    android:text="sale"/>
                 <RadioButton
                     android:id="@+id/btnClothes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/clothes"
-                    android:text="Clothes"/>
+                    android:drawableTop="@drawable/invest"
+                    android:text="invest"/>
                 <RadioButton
                     android:id="@+id/btnMedical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/medical"
-                    android:text="Medical"/>
+                    android:drawableTop="@drawable/others"
+                    android:text="others"/>
                 <!--                <RadioButton
                                     android:id="@+id/btnGift"
                                     android:layout_width="0dp"
