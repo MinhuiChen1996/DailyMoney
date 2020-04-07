@@ -230,7 +230,7 @@ public class Database {
         );
     }
 
-    public Cursor barChartPay(String str, String Type, String userid) {
+    public Cursor barChartRecord(String str, String Type, String userid) {
         String[] selectionArgs = {str + "%", Type, userid};
         return db.query(RECORD_TABLE, new String[]
                         {
@@ -245,7 +245,7 @@ public class Database {
         );
     }
 
-    public Cursor pieChartPay(String str, String Type, String userid) {
+    public Cursor pieChartRecord(String str, String Type, String userid) {
         String[] selectionArgs = {str + "%", Type, userid};
         return db.query(RECORD_TABLE, new String[]
                         {

@@ -4,19 +4,26 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,8 +79,33 @@ public class piechart extends AppCompatActivity {
         strDe = mY.format(c.getTime());
 
         String userid = getuserid();
-        initpieChart(strDe, userid);
+        RadioGroup rad = (RadioGroup)findViewById(R.id.radioSelector);
+        RadioButton expnese = (RadioButton)findViewById(R.id.rdb_expense);
+        RadioButton income = (RadioButton)findViewById(R.id.rdb_income);
 
+        initExpense(userid,c);
+        rad.check(R.id.rdb_expense);
+
+        expnese.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pieChart.notifyDataSetChanged();
+                pieChart.invalidate();
+                initExpense(userid,c);
+            }
+        });
+        income.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pieChart.notifyDataSetChanged();
+                pieChart.invalidate();
+                initIncome(userid,c);
+            }
+        });
+
+    }
+    private void initIncome(String userid, Calendar c){
+        initpieChartIncome(strDe, userid);
         date_picker_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +116,7 @@ public class piechart extends AppCompatActivity {
                         monthYearStr = year + "-" + (month + 1) + "-" + i2;
                         c.set(year, month, i2);
                         strDe = mY.format(c.getTime());
-                        initpieChart(strDe, userid);
+                        initpieChartIncome(strDe, userid);
                         monthYear.setText(formatMonthYear(monthYearStr));
 
                     }
@@ -92,14 +124,33 @@ public class piechart extends AppCompatActivity {
                 pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
             }
         });
-
     }
+    private void initExpense(String userid, Calendar c){
+        initpieChartExpense(strDe, userid);
+        date_picker_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
+                pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
+                        monthYearStr = year + "-" + (month + 1) + "-" + i2;
+                        c.set(year, month, i2);
+                        strDe = mY.format(c.getTime());
+                        initpieChartExpense(strDe, userid);
+                        monthYear.setText(formatMonthYear(monthYearStr));
 
-    private void initpieChart(String str, String uid) {
+                    }
+                });
+                pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+            }
+        });
+    }
+    private void initpieChartIncome(String str, String uid) {
 
         db.open();
-        String type = "Expense";
-        Cursor c = db.pieChartPay(str, type, uid);
+        String type = "Income";
+        Cursor c = db.pieChartRecord(str, type, uid);
         ArrayList<String> cate = new ArrayList<>();
         ArrayList<Double> amount = new ArrayList<>();
 
@@ -115,7 +166,8 @@ public class piechart extends AppCompatActivity {
 
         for (int counter = 0; counter < amount.size(); counter++) {
             xVals.add(cate.get(counter));
-            yVals.add(new BarEntry(Float.valueOf(String.valueOf(amount.get(counter))), counter));
+            float y = Float.valueOf(String.valueOf(amount.get(counter)));
+            yVals.add(new BarEntry(y, counter));
         }
 
         PieDataSet dataSet = new PieDataSet(yVals, "");
@@ -123,9 +175,73 @@ public class piechart extends AppCompatActivity {
         PieData data = new PieData(xVals, dataSet);
 
         pieChart.setData(data);// set the data and list of labels into chart
-        pieChart.setDescription("Monthly Category Report");  // set the description
+//        pieChart.setDescription("Monthly Category Report");  // set the description
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.setCenterText("Income" );
+        pieChart.setCenterTextSize(14f);
+        pieChart.setUsePercentValues(true);
         pieChart.animateXY(2500, 2500);
+        for (IDataSet set : pieChart.getData().getDataSets()) {
+            set.setDrawValues(true);
+            set.setValueTextSize(10);
+            set.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    DecimalFormat mFormat = new DecimalFormat("###,###,##0.00");
+                    return mFormat.format(value);
+                }
+            });
+        }
+    }
+
+    private void initpieChartExpense(String str, String uid) {
+
+        db.open();
+        String type = "Expense";
+        Cursor c = db.pieChartRecord(str, type, uid);
+        ArrayList<String> cate = new ArrayList<>();
+        ArrayList<Double> amount = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            cate.add(c.getString(c.getColumnIndex("cate")));
+            amount.add(c.getDouble(c.getColumnIndex("cateTotal")));
+            c.moveToNext();
+        }
+
+        ArrayList yVals = new ArrayList<>();
+        ArrayList<String> xVals = new ArrayList<>();
+
+        for (int counter = 0; counter < amount.size(); counter++) {
+            xVals.add(cate.get(counter));
+            float y = Float.valueOf(String.valueOf(amount.get(counter)));
+            y = -y;
+            yVals.add(new BarEntry(y, counter));
+        }
+
+        PieDataSet dataSet = new PieDataSet(yVals, "");
+
+        PieData data = new PieData(xVals, dataSet);
+
+        pieChart.setData(data);// set the data and list of labels into chart
+//        pieChart.setDescription("Monthly Category Report");  // set the description
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        pieChart.setCenterText("Expense" );
+        pieChart.setCenterTextSize(14f);
+        pieChart.animateXY(2500, 2500);
+
+        for (IDataSet set : pieChart.getData().getDataSets()) {
+            set.setDrawValues(true);
+            set.setValueTextSize(10);
+            set.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    DecimalFormat mFormat = new DecimalFormat("###,###,##0.00");
+                    return mFormat.format(value);
+                }
+            });
+        }
     }
 
     String formatMonthYear(String str) {

@@ -99,6 +99,9 @@ public class Register extends AppCompatActivity {
                 } else if (!newPassowrd.equals(newPassowrd2)) {
                     Toast.makeText(Register.this, "Password is different!", Toast.LENGTH_SHORT).show();
                     return;
+                } else if (!newPassowrd.equals(newEmail)) {
+                    Toast.makeText(Register.this, "Please input email!", Toast.LENGTH_SHORT).show();
+                    return;
                 } else if (isExistUserName(newUsername)) {
                     Toast.makeText(Register.this, "This user is exist.", Toast.LENGTH_SHORT).show();
                     return;

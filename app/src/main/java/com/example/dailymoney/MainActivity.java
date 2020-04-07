@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             income = 0;
         }
 
-        balance = income - expense;
+        balance = income + expense;
 
 
         tv_income.setText(String.format("%.2f", income));

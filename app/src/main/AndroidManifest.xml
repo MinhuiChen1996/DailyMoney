@@ -14,8 +14,10 @@
         android:roundIcon="@drawable/money"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".modifyincome"
-            android:label="Modify Income" ></activity>
+        <activity android:name=".forgetpassword"></activity>
+        <activity
+            android:name=".modifyincome"
+            android:label="Modify Income" />
         <activity
             android:name=".modify"
             android:label="Modify Expense" />

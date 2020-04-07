@@ -330,6 +330,7 @@ public class Record extends AppCompatActivity {
                     type = "Expense";
 
                     double Ramount = Double.parseDouble(amount);
+                    Ramount = -Ramount;
                     amount = String.format("%.2f", Ramount);
                     Log.d("amount", amount);
                     long qid = db.insertRecord(type, Rcate, name, amount, date, time, memo, account, userid);
