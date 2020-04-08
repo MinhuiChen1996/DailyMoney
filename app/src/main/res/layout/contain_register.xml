@@ -78,9 +78,10 @@
         android:textColorHint="#a3a3a3"
         android:textSize="14sp"/>
     <TextView
+        android:layout_marginLeft="35dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email will use for look "
+        android:text="Email will useing for find back password! "
         />
     <Button
         android:id="@+id/btn_register"

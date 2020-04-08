@@ -180,6 +180,26 @@ public class Database {
                         },
                 KEY_USERNAME + "=?", selectionArgs, null, null, null, null);
     }
+    public Cursor checkEmail(String userEmail) throws SQLException {
+        String[] selectionArgs = {userEmail};
+        return db.query(true, USER_TABLE, new String[]
+                        {
+                                KEY_USERID,
+                                KEY_USERNAME,
+                                KEY_USERPASSWORD,
+                                KEY_USEREMAIL
+                        },
+                KEY_USEREMAIL + " like ?", selectionArgs, null, null, null, null);
+    }
+
+    public long updatePassword(String userid, String userPassword) {
+        String[] selectionArgs = {userid};
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put(KEY_USERPASSWORD, userPassword);
+
+        return db.update(USER_TABLE, initialValues, KEY_USERID + "=?",selectionArgs);
+    }
 
     public Cursor getAllAccount() {
         return db.query(ACCOUNT_TABLE, new String[]

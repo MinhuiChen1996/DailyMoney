@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,51 +14,44 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class forgetpassword extends AppCompatActivity {
+public class modifypassword extends AppCompatActivity {
     private Toolbar toolbar;
-
-    private EditText email;
+    SharedPreferences sp;
+    private EditText newpassword;
     private Button next;
     private Database db;
-    String userid,username, useremail;
-
+    String userid, userpassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgetpassword);
-
+        setContentView(R.layout.activity_modifypassword);
         //set Status bar
         setStatus();
         //set Toolbar
         initToolbar();
 
+        userid =  getuserid();
+
         db = new Database(this);
 
-        email = (EditText) findViewById(R.id.et_newemail);
+        newpassword = (EditText) findViewById(R.id.et_password);
         next = (Button) findViewById(R.id.btn_next);
 
 
-//        useremail = "amrojiwen@gmail.com";
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                useremail = email.getText().toString().trim();
-                if (TextUtils.isEmpty(useremail)) {
-                    Log.d("email",useremail);
-                    Toast.makeText(forgetpassword.this, "Please input email.", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (isExistUserEmail(useremail)) {
-                    Intent intent = new Intent(forgetpassword.this, emailverification.class);
-                    startActivity(intent);
-                    finish();
+                userpassword = newpassword.getText().toString();
+                if (TextUtils.isEmpty(userpassword)) {
+                    Toast.makeText(modifypassword.this, "Please input new password.", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Toast.makeText(forgetpassword.this, "This email not exist.", Toast.LENGTH_SHORT).show();
+                    updatepassword(userid,userpassword);
+                    SharedPreferences preferences = getSharedPreferences("findbackpassword", 0);
+                    preferences.edit().remove("text").commit();
                 }
 
             }
@@ -81,7 +73,7 @@ public class forgetpassword extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Intent intent = new Intent(forgetpassword.this, Login.class);
+                Intent intent = new Intent(modifypassword.this, forgetpassword.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -99,28 +91,25 @@ public class forgetpassword extends AppCompatActivity {
 
     }
 
-    private boolean isExistUserEmail(String userEmail) {
+    private String getuserid() {
+        sp = getSharedPreferences("findbackpassword", MODE_PRIVATE);
+        return sp.getString("userid", "");
+    }
 
-        boolean has_userEmail = false;
+    private void updatepassword(String userid, String passwrod){
 
         db.open();
-
-        Cursor c = db.checkEmail(userEmail);
-        c.moveToFirst();
-        if (c.getCount() != 0) {
-
-            userid = c.getString(c.getColumnIndex("userid"));
-            username = c.getString(c.getColumnIndex("userName"));
-
-            SharedPreferences sp = getSharedPreferences("findbackpassword", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString("userid", userid);
-            editor.putString("email", useremail);
-            editor.commit();
-            has_userEmail = true;
+        String md5Pw = MD5Utils.md5(passwrod);// encryption password by MD5
+        long id = db.updatePassword(userid,md5Pw);
+        if (id != -1) {
+            Toast.makeText(getApplicationContext(), "Change password success!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(modifypassword.this, Login.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Sorry! change password is failed.", Toast.LENGTH_LONG).show();
         }
-
         db.close();
-        return has_userEmail;
+
     }
 }
