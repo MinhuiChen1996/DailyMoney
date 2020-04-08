@@ -62,13 +62,42 @@
                     android:layout_weight="1"
                     android:drawableTop="@drawable/traffic"
                     android:text="traffic"/>
-                <!--                <RadioButton
-                                    android:id="@+id/btnGift"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:drawableTop="@drawable/gift"
-                                    android:text="Gift"/>-->
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/radioGroup2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/btnMedical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:drawableTop="@drawable/medical"
+                    android:text="medical"/>
+                <RadioButton
+                    android:id="@+id/btnShop"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/shop"
+                    android:text="shop"/>
+                <RadioButton
+                    android:id="@+id/btnPets"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/pets"
+                    android:text="pets"/>
+                <RadioButton
+                    android:id="@+id/btnOthers"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/others"
+                    android:text="others"/>
             </RadioGroup>
 
             <!--        </GridLayout>-->

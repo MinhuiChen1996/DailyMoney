@@ -59,7 +59,7 @@ public class modify extends AppCompatActivity {
 
     private String recordid, userid, strDate, curTime, type, cate, name, memo, account, date, time, amount;
 
-    private RadioGroup radgroup;
+    private RadioGroup radgroup,radgroup2;
     SharedPreferences sp;
     private Intent intent;
 
@@ -160,6 +160,9 @@ public class modify extends AppCompatActivity {
             newAccount = (EditText) findViewById(R.id.newAcount);
             newAmount = (EditText) findViewById(R.id.newAmount);
             radgroup = (RadioGroup) findViewById(R.id.radioGroup);
+            radgroup2 = (RadioGroup) findViewById(R.id.radioGroup2);
+            radgroup.clearCheck();
+            radgroup2.clearCheck();
 
             cate = c.getString(c.getColumnIndex("cate"));
             name = c.getString(c.getColumnIndex("name"));
@@ -168,6 +171,8 @@ public class modify extends AppCompatActivity {
             amount = c.getString(c.getColumnIndex("amount"));
             date = c.getString(c.getColumnIndex("date"));
             time = c.getString(c.getColumnIndex("time"));
+
+
 
             newName.setText(name);
             newMemo.setText(memo);
@@ -190,7 +195,21 @@ public class modify extends AppCompatActivity {
                 case "traffic":
                     radgroup.check(R.id.btnTraffic);
                     break;
+                case "medical":
+                    radgroup2.check(R.id.btnMedical);
+                    break;
+                case "shop":
+                    radgroup2.check(R.id.btnShop);
+                    break;
+                case "pets":
+                    radgroup2.check(R.id.btnPets);
+                    break;
+                case "others":
+                    radgroup2.check(R.id.btnOthers);
+                    break;
             }
+            radgroup.setOnCheckedChangeListener(listener1);
+            radgroup2.setOnCheckedChangeListener(listener2);
 //            c.moveToNext();
         } else {
             intent = new Intent(modify.this, MainActivity.class);
@@ -200,7 +219,31 @@ public class modify extends AppCompatActivity {
         }
         db.close();
     }
+    private RadioGroup.OnCheckedChangeListener listener1 = new RadioGroup.OnCheckedChangeListener() {
 
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId != -1) {
+                radgroup.setOnCheckedChangeListener(null); // remove the listener before clearing so we don't throw that stackoverflow exception(like Vladimir Volodin pointed out)
+                radgroup2.clearCheck(); // clear the second RadioGroup!
+                radgroup2.setOnCheckedChangeListener(listener2); //reset the listener
+                Log.e("XXX2", "do the work");
+            }
+        }
+    };
+
+    private RadioGroup.OnCheckedChangeListener listener2 = new RadioGroup.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId != -1) {
+                radgroup.setOnCheckedChangeListener(null);
+                radgroup.clearCheck();
+                radgroup.setOnCheckedChangeListener(listener1);
+                Log.e("XXX2", "do the work");
+            }
+        }
+    };
     private void amountKeyboard() {
         newAmount.setEnabled(false);
         newAmount.addTextChangedListener(new Record.TradeTextWatcher(newAmount, null));
@@ -329,6 +372,14 @@ public class modify extends AppCompatActivity {
                     RadioButton rd = (RadioButton) radgroup.getChildAt(i);
                     if (rd.isChecked()) {
                         Rcate = rd.getText().toString();
+                    }
+                    else {
+                        for (int y = 0; y < radgroup2.getChildCount(); y++) {
+                            rd = (RadioButton) radgroup2.getChildAt(y);
+                            if (rd.isChecked()) {
+                                Rcate = rd.getText().toString();
+                            }
+                        }
                     }
                 }
 

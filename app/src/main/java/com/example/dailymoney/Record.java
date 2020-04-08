@@ -60,7 +60,7 @@ public class Record extends AppCompatActivity {
 
     private String speech, userid, strDate, sPrice, pName, curTime, type;
 
-    private RadioGroup radgroup;
+    private RadioGroup radgroup,radgroup2;
     SharedPreferences sp;
 
     private Spinner sp_option;
@@ -108,6 +108,13 @@ public class Record extends AppCompatActivity {
         newAccount = (EditText) findViewById(R.id.newAcount);
         newAmount = (EditText) findViewById(R.id.newAmount);
         radgroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radgroup2 = (RadioGroup) findViewById(R.id.radioGroup2);
+//        radgroup.clearCheck();
+        radgroup2.clearCheck();
+        radgroup.setOnCheckedChangeListener(listener1);
+        radgroup2.setOnCheckedChangeListener(listener2);
+
+
 
 
         Bundle extras = getIntent().getExtras();
@@ -209,6 +216,32 @@ public class Record extends AppCompatActivity {
         mBtnKey_sk.setOnClickListener(mClickListener);
 
     }
+
+    private RadioGroup.OnCheckedChangeListener listener1 = new RadioGroup.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId != -1) {
+                radgroup.setOnCheckedChangeListener(null); // remove the listener before clearing so we don't throw that stackoverflow exception(like Vladimir Volodin pointed out)
+                radgroup2.clearCheck(); // clear the second RadioGroup!
+                radgroup2.setOnCheckedChangeListener(listener2); //reset the listener
+                Log.e("XXX2", "do the work");
+            }
+        }
+    };
+
+    private RadioGroup.OnCheckedChangeListener listener2 = new RadioGroup.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId != -1) {
+                radgroup.setOnCheckedChangeListener(null);
+                radgroup.clearCheck();
+                radgroup.setOnCheckedChangeListener(listener1);
+                Log.e("XXX2", "do the work");
+            }
+        }
+    };
 
     @Override
     public void setTitle(CharSequence title) {
@@ -316,6 +349,14 @@ public class Record extends AppCompatActivity {
                     RadioButton rd = (RadioButton) radgroup.getChildAt(i);
                     if (rd.isChecked()) {
                         Rcate = rd.getText().toString();
+                    }
+                    else {
+                        for (int y = 0; y < radgroup2.getChildCount(); y++) {
+                            rd = (RadioButton) radgroup2.getChildAt(y);
+                            if (rd.isChecked()) {
+                                Rcate = rd.getText().toString();
+                            }
+                        }
                     }
                 }
 

@@ -212,6 +212,15 @@ public class recordinfo extends AppCompatActivity {
                 case "traffic":
                     iv_cate.setImageResource(R.drawable.traffic);
                     break;
+                case "medical":
+                    iv_cate.setImageResource(R.drawable.medical);
+                    break;
+                case "shop":
+                    iv_cate.setImageResource(R.drawable.shop);
+                    break;
+                case "pets":
+                    iv_cate.setImageResource(R.drawable.pets);
+                    break;
                 case "salary":
                     iv_cate.setImageResource(R.drawable.salary);
                     break;
