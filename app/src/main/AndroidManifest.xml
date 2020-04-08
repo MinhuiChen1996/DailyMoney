@@ -14,11 +14,17 @@
         android:roundIcon="@drawable/money"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".emailverification"
-            android:label="Verification Code" ></activity>
-        <activity android:name=".modifypassword"
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
+            android:name=".emailverification"
+            android:label="Verification Code" />
+        <activity
+            android:name=".modifypassword"
             android:label="New Password" />
-        <activity android:name=".forgetpassword"
+        <activity
+            android:name=".forgetpassword"
             android:label="Inputer Email" />
         <activity
             android:name=".modifyincome"

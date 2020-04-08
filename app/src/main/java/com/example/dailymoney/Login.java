@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -63,9 +64,15 @@ public class Login extends AppCompatActivity {
     private void checkLoginStatus() {
         sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
         if (getloginstatus()) {
-            Intent intent = new Intent(Login.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            if(quickaccount()){
+                Intent intent = new Intent(Login.this, Record.class);
+                startActivity(intent);
+                finish();
+            }else{
+                Intent intent = new Intent(Login.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 
@@ -159,4 +166,11 @@ public class Login extends AppCompatActivity {
 
         editor.commit();
     }
+
+    private boolean quickaccount(){
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean quickaccounting=prefs.getBoolean("quickaccounting",false);
+        return quickaccounting;
+    }
+
 }

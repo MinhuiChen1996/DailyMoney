@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -335,9 +336,18 @@ public class Record extends AppCompatActivity {
                     Log.d("amount", amount);
                     long qid = db.insertRecord(type, Rcate, name, amount, date, time, memo, account, userid);
                     if (qid != -1) {
-                        Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
-                        finish();
-                        startActivity(getIntent());
+                        if(continuousexpense()){
+                            Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
+                            finish();
+                            startActivity(getIntent());
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Record.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
                     } else {
                         Toast.makeText(getApplicationContext(), "Sorry! record isn't add.", Toast.LENGTH_LONG).show();
                     }
@@ -429,6 +439,12 @@ public class Record extends AppCompatActivity {
     private String getuserid() {
         sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
         return sp.getString("userid", "");
+    }
+
+    private boolean continuousexpense(){
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean continuousexpense=prefs.getBoolean("continuousexpense",false);
+        return continuousexpense;
     }
 
 

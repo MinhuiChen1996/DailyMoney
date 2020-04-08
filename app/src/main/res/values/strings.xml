@@ -4,4 +4,20 @@
     <string name="nav_close">DrawerClose</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="Bookkepping_header">Bookkepping</string>
+    <string name="notification">Notification</string>
+
+
+
+    <!-- Sync Preferences -->
+    <string name="quick_accounting">Quick Accounting</string>
+    <string name="continuous_expense">Continuous add Expenses</string>
+    <string name="continuous_income">Continuous add Incomes</string>
+
+    <!-- Sync Preferences -->
+    <string name="reminder">Remind bookkeeping</string>
+
 </resources>

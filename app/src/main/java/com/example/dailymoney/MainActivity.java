@@ -370,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBlue));
     }
 
-    //左侧菜单item点击时回调
+    //left menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -391,6 +391,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 createCSV(strDe);
                 break;
             case R.id.navigation_setting:
+                intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.navigation_backupAndRestore:
                 intent = new Intent(MainActivity.this, backupAndrestrore.class);
@@ -429,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    //返回键的处理
+    //back pressed
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -593,4 +596,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(Intent.createChooser(intentShareFile, "Share File"));
 
     }
+
+
+
 }

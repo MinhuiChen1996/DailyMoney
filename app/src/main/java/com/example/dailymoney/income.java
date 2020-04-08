@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -345,9 +346,17 @@ public class income extends AppCompatActivity {
                     amount = String.format("%.2f", Ramount);
                     long qid = db.insertRecord(type, Rcate, name, amount, date, time, memo, account, userid);
                     if (qid != -1) {
-                        Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
-                        finish();
-                        startActivity(getIntent());
+                        if(continuousincome()){
+                            Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
+                            finish();
+                            startActivity(getIntent());
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Successfully Save Record!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(income.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(), "Sorry! record isn't add.", Toast.LENGTH_LONG).show();
                     }
@@ -367,4 +376,10 @@ public class income extends AppCompatActivity {
             }
         }
     };
+
+    private boolean continuousincome(){
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean continuousincome=prefs.getBoolean("continuousexpense",false);
+        return continuousincome;
+    }
 }
