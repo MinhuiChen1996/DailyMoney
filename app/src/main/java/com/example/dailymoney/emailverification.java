@@ -106,33 +106,33 @@ public class emailverification extends AppCompatActivity {
     }
 
     private void sendMailTest(String email, int code){
-//初始化框架
+//initalize
         EmailKit.initialize(this);
 
-//配置发件人邮件服务器参数
+//set sender email
         EmailKit.Config config = new EmailKit.Config()
-                .setMailType(EmailKit.MailType.$163)     //选择邮箱类型，快速配置服务器参数
-                .setAccount("dailymoney@163.com")             //发件人邮箱
-                .setPassword("XYLCVQVQLTESHCHS");                  //密码或授权码
+                .setMailType(EmailKit.MailType.$163)     // email type
+                .setAccount("dailymoney@163.com")             //sender email
+                .setPassword("XYLCVQVQLTESHCHS");                  //password
 
-//设置一封草稿邮件
+//set email contain
         Draft draft = new Draft()
-                .setNickname("Daily Money Application")                      //发件人昵称
-                .setTo(email)                        //收件人邮箱
-                .setSubject("Verification Email From Daily Money")             //邮件主题
-                .setText("Dear User " +"\r\n\r\n"+"To verify this email address belongs to you, enter the code below on the email verification page:"+"\r\n"+code +"\r\n"+"This code only validate once.");                 //邮件正文
+                .setNickname("Daily Money Application")                      // sender nickname
+                .setTo(email)                        //reciver email
+                .setSubject("Verification Email From Daily Money")             //contain of email
+                .setText("Dear User " +"\r\n\r\n"+"To verify this email address belongs to you, please enter the code below on the email verification page:"+"\r\n"+code +"\r\n"+"This code only validate once.");                 //邮件正文
 
-//使用SMTP服务发送邮件
+//set email by SMTP services
         EmailKit.useSMTPService(config)
                 .send(draft, new EmailKit.GetSendCallback() {
                     @Override
                     public void onSuccess() {
-                        Log.i("tag", "发送成功！");
+                        Log.i("tag", "Send Successfully！");
                     }
 
                     @Override
                     public void onFailure(String errMsg) {
-                        Log.i("tag", "发送失败，错误：" + errMsg);
+                        Log.i("tag", "Send Fail，Error：" + errMsg);
                     }
                 });
     }

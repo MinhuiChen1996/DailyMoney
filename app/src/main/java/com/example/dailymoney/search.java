@@ -15,9 +15,11 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,8 +41,8 @@ public class search extends AppCompatActivity {
 
     SimpleCursorAdapter myAdapter;
     private Database db;
-    String[] columns = new String[]{"name", "date", "memo", "amount"};
-    int[] recordList = new int[]{R.id.name, R.id.date, R.id.memo, R.id.amount};
+    String[] columns = new String[]{"_id","name", "date", "memo", "amount"};
+    int[] recordList = new int[]{R.id._id,R.id.name, R.id.date, R.id.memo, R.id.amount};
     private ListView mListView;
     public ArrayAdapter mList;
 
@@ -76,6 +78,20 @@ public class search extends AppCompatActivity {
 
                     myAdapter = new SimpleCursorAdapter(search.this, R.layout.row_record, c, columns, recordList);
                     mListView.setAdapter(myAdapter);
+
+                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            String recordId = ((TextView) view.findViewById(R.id._id)).getText().toString();
+                            Log.d("detail", recordId);
+                            Intent intent = new Intent(search.this, recordinfo.class);
+                            intent.putExtra("recordId", recordId);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
                     db.close();
                 }
             }

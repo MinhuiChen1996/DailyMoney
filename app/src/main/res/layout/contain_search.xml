@@ -14,20 +14,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Search"/>
         <ImageButton
             android:id="@+id/btnSearch"
-            android:layout_marginLeft="40dp"
+            android:layout_marginRight="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/search"
+            android:src="@drawable/msearch"
             android:background="@color/colorLightBlue"
             />
-        <EditText
-            android:id="@+id/searchText"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:hint="Search"/>
     </LinearLayout>
 
     <LinearLayout

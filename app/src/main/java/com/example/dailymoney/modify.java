@@ -394,7 +394,9 @@ public class modify extends AppCompatActivity {
                     db.open();
 
                     double Ramount = Double.parseDouble(amount);
+                    Ramount = -Ramount;
                     amount = String.format("%.2f", Ramount);
+
                     long qid = db.updateRecord(recordid, Rcate, name, amount, date, time, memo, account);
                     if (qid != -1) {
                         Toast.makeText(getApplicationContext(), "Successfully update Record!", Toast.LENGTH_LONG).show();

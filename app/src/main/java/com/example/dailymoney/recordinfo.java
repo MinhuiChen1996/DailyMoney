@@ -32,7 +32,7 @@ public class recordinfo extends AppCompatActivity {
 
     ImageView iv_cate;
     TextView tv_name, tv_type, tv_amount, tv_memo, tv_time, tv_account;
-
+    Bundle extras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class recordinfo extends AppCompatActivity {
 
         String userid = getuserid();
 
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         if (extras != null) {
             recordid = extras.getString("recordId");
             //The key argument here must match that used in the other activity
@@ -162,8 +162,9 @@ public class recordinfo extends AppCompatActivity {
         db.open();
         Cursor c = db.getRecord(rid, uid);
 
-        Log.d("detail2", rid + " " + uid);
+
         int i = c.getCount();
+        Log.d("detail2", rid + " " + uid + i);
 
         if (c.getCount() > 0) {
             c.moveToFirst();

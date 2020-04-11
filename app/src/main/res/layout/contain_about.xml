@@ -96,7 +96,7 @@
         android:id="@+id/tv_contactEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Emial: D17125347@mytudublin.com"
+        android:text="Emial: D17125347@mytudublin.ie"
         android:textSize="15dp"
         android:textColor="@color/colorLightGrey"
         android:clickable="true"
@@ -114,8 +114,9 @@
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Privacy Policy"
+        android:text="Privacy Policy \nhttps://daily-money-0.flycricket.io/privacy.html"
         android:textSize="20dp"
+        android:autoLink="web"
         android:textColor="@color/mdtp_white"
         android:layout_marginLeft="10dp"/>
     <TableRow

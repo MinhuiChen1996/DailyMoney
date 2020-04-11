@@ -191,7 +191,7 @@ public class barchart extends AppCompatActivity {
 
         barChart.setData(data); // set the data and list of labels into chart
 
-        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+//        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
 
         XAxis xAxis = barChart.getXAxis();
@@ -251,18 +251,15 @@ public class barchart extends AppCompatActivity {
         BarDataSet bardataset = new BarDataSet(yVals, "Day");
         BarData data = new BarData(xVals, bardataset);
         barChart.setData(data); // set the data and list of labels into chart
-        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
-
+//        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
-
         barChart.getAxisLeft().setDrawAxisLine(false);
         barChart.getAxisRight().setEnabled(false);
         YAxis yAxis = barChart.getAxisLeft();
         yAxis.setStartAtZero(false);
-
         for (IDataSet set : barChart.getData().getDataSets()) {
             set.setDrawValues(true);
             set.setValueTextSize(10);
@@ -274,9 +271,7 @@ public class barchart extends AppCompatActivity {
                 }
             });
         }
-
         barChart.animateY(1500);
-
         barChart.invalidate();
     }
 

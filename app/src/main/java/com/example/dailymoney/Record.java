@@ -78,9 +78,9 @@ public class Record extends AppCompatActivity {
         sp_option = (Spinner) findViewById(R.id.sp_option);
         List<String> optionsList = new LinkedList<>(Arrays.asList("Expense", "Income"));
         ArrayAdapter arr_adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, optionsList);
-        //设置样式
+        //set theme
         arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //加载适配器
+
         sp_option.setAdapter(arr_adapter);
         sp_option.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
@@ -125,10 +125,15 @@ public class Record extends AppCompatActivity {
 
         // split the keyword from speech
         sPrice = extractPrice(speech);
+
         newAmount.setText(sPrice);
+;
+
+
 
         pName = extracProduct(speech);
         newName.setText(pName);
+
 
         // current date
         Calendar c = Calendar.getInstance();
@@ -448,13 +453,23 @@ public class Record extends AppCompatActivity {
         boolean found = false;
         for (char c : str.toCharArray()) {
             if (Character.isDigit(c) || c == '.') {
-                sb.append(c);
-                found = true;
-            } else if (found || c == '$' || c == '€') {
-                break;
+                if (sb.toString().length() - 1 - sb.toString().toString().indexOf(".") == 2) {
+                    break;
+                }
+                else{
+                    sb.append(c);
+                    found = true;
+                }
             }
         }
-        return sb.toString();
+        if(sb.toString().equals("")){
+            return sb.toString();
+        }
+        else {
+            double Vamount = Double.parseDouble(sb.toString());
+            String amount = String.format("%.2f", Vamount);
+            return amount;
+        }
     }
 
     public static String extracProduct(final String str) {
@@ -462,7 +477,7 @@ public class Record extends AppCompatActivity {
 
         StringBuilder sb = new StringBuilder();
         for (char c : str.toCharArray()) {
-            if (Character.isDigit(c) || c == '$' || c == '€') {
+            if (Character.isDigit(c) || c == '$' || c == '€'|| c == '£') {
                 break;
             } else {
                 sb.append(c);

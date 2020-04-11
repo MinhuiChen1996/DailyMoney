@@ -80,9 +80,12 @@ public class Login extends AppCompatActivity {
         etUsername = (EditText) findViewById(R.id.et_user_name);
         etPassword = (EditText) findViewById(R.id.et_pw);
 
+
+
         tvRegister = (TextView) findViewById(R.id.tv_register);
         tvfindpw = (TextView) findViewById(R.id.tv_find_pw);
         BtnLogin = findViewById(R.id.btn_login);
+
         checkLoginStatus();
 
         tvRegister.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +117,6 @@ public class Login extends AppCompatActivity {
 
                 usPw = findPw(encryptionUsername);
 
-                db.open();
                 if (TextUtils.isEmpty(username)) {
                     Toast.makeText(Login.this, "Please input username.", Toast.LENGTH_SHORT).show();
                     return;
@@ -129,7 +131,6 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "Login successful.", Toast.LENGTH_SHORT).show();
                     saveLoginStatus(true, username);
                     Login.this.finish();
-
                     startActivity(new Intent(Login.this, MainActivity.class));
                     return;
                 } else {
@@ -139,7 +140,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private String findPw(String userName) {
+    public String findPw(String userName) {
         db.open();
         String userPassword = "";
         Cursor c = db.getUsPw(userName);
@@ -153,17 +154,11 @@ public class Login extends AppCompatActivity {
     }
 
     private void saveLoginStatus(boolean status, String userName) {
-        ;
         sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
-
         SharedPreferences.Editor editor = sp.edit();
-
         editor.putString("userid", userid);
-
         editor.putBoolean("isLogin", status);
-
         editor.putString("loginUserName", userName);
-
         editor.commit();
     }
 

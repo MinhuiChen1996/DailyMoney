@@ -32,7 +32,7 @@ public class Database {
     private static final String CREATE_TABLE_USER = "create table User ( userid integer primary key autoincrement, " +
             "userName text unique not null, " +
             "userPassword text not null," +
-            "userEmail text);";
+            "userEmail text unique not null);";
 
     private static final String ACCOUNTID = "accountId";
     private static final String ACCOUNTNAME = "AName";
@@ -346,8 +346,8 @@ public class Database {
     }
 
     public boolean deleteRocord(String rid) {
-        //
-        return db.delete(RECORD_TABLE, RECORDID + "=" + rid, null) > 0;
+        String[] whereArgs = {rid};
+        return db.delete(RECORD_TABLE, RECORDID + "=?" , whereArgs) > 0;
     }
 
     public long insertRecord(String type, String cate, String name, String amount, String date, String time, String memo, String accountName, String userid) {

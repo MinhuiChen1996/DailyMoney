@@ -97,7 +97,6 @@ public class modifypassword extends AppCompatActivity {
     }
 
     private void updatepassword(String userid, String passwrod){
-
         db.open();
         String md5Pw = MD5Utils.md5(passwrod);// encryption password by MD5
         long id = db.updatePassword(userid,md5Pw);

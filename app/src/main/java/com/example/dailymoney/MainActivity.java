@@ -115,9 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initgNavagationView();
 
         mListView = (ListView) findViewById(R.id.list);
-/*        mListView.setEnabled(true);
-        //注册OnTouch监听器
-        mListView.setOnTouchListener(new myOnTouchListener());*/
+
 
 
         tv_income = (TextView) findViewById(R.id.tv_income);
@@ -177,9 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setBalance(String date, String userid) {
         db.open();
         Cursor expenseC = db.sumMonth(date, "Expense", userid);
-
         double expense, income, balance;
-
         if (expenseC.getCount() > 0) {
             expenseC.moveToFirst();
             expense = expenseC.getDouble(expenseC.getColumnIndex("Total"));
@@ -187,9 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             expense = 0;
         }
-
         Cursor incomeC = db.sumMonth(date, "Income", userid);
-
         if (incomeC.getCount() > 0) {
             incomeC.moveToFirst();
             income = incomeC.getDouble(expenseC.getColumnIndex("Total"));
@@ -197,15 +191,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             income = 0;
         }
-
         balance = income + expense;
-
-
         tv_income.setText(String.format("%.2f", income));
         tv_expense.setText(String.format("%.2f", expense));
         tv_balance.setText(String.format("%.2f", balance));
-
-
         db.close();
     }
 
@@ -270,8 +259,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
             }
         });
-
-
         db.close();
         // bind image with records
   /*      myAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -313,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                "Speech recognition demo");
+                "Try to say the name and price for record");
         startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
     }
 
@@ -323,7 +310,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             // dialog menu to display user voice and user can select correct sentence
-
             //array list to store the voice detection result
             ArrayList matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             mList = new ArrayAdapter(this, android.R.layout.simple_list_item_1, matches);
@@ -528,22 +514,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             builder.show();
         } else
             Toast.makeText(this, "Unable to create directory. Retry", Toast.LENGTH_SHORT).show();
-
-
-
         /*        return filename;*/
     }
 
     private void writeToCSVfile(String str, String userid, String filename) {
-
         db.open();
         Cursor c = db.monthRecord(str, userid);
-
         FileWriter fw = null;
         try {
             int rowcount = 0;
             int colcount = 0;
-
             fw = new FileWriter(filename);
             BufferedWriter bw = new BufferedWriter(fw);
             rowcount = c.getCount();
@@ -580,21 +560,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void shareFile(File file) {
-
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-
         intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
         intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-
-        //if you need
-        //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);
-        //intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
-
         startActivity(Intent.createChooser(intentShareFile, "Share File"));
-
     }
 
 
